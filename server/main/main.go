@@ -1,7 +1,9 @@
 package main
 
 import (
+	"log"
 	"net/http"
+	"pos/pkg/config"
 	"pos/pkg/routes"
 
 	"github.com/gorilla/mux"
@@ -9,6 +11,7 @@ import (
 )
 
 func main() {
+	config.Connect()
 	r := mux.NewRouter()
 	routes.UserRoutes(r)
 	c := cors.New(cors.Options{
@@ -17,5 +20,5 @@ func main() {
 	})
 
 	handler := c.Handler(r)
-	http.ListenAndServe("localhost:8080", handler)
+	log.Fatal(http.ListenAndServe("localhost:8080", handler))
 }
