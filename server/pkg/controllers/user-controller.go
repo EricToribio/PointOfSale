@@ -12,5 +12,5 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 	NewAddress := models.Address{}
 	utils.ParseBody(r, NewUser)
 	utils.ParseBody(r, NewAddress)
-	fmt.Print(NewUser, NewAddress)
+	fmt.Println(NewUser.FirstName, NewAddress.Street)
 }

@@ -17,9 +17,10 @@ export default ({ setRegister }: any) => {
     const [city, setCity] = useState("");
     const [zip,setZip] = useState("");
     const [errors, setErrors] = useState();
-    const handleSubmit = async (e: Event) => {
+    const handleSubmit = (e: any) => {
+        console.log("here")
         e.preventDefault();
-        await axios.post('http://localhost:8080/api/new/user', {
+        axios.post('http://localhost:8080/api/new/user', {
             email: email,
             firstName: firstName,
             lastName: lastName,
@@ -30,6 +31,7 @@ export default ({ setRegister }: any) => {
             zip: zip,
         })
             .then(res => {
+                console.log(res)
 
             }
             )
@@ -38,7 +40,7 @@ export default ({ setRegister }: any) => {
         <div className="card col-7 mx-auto p-4">
             {states.length !== 0 &&
                 <div className="d-flex justify-content-center gap-4">
-                    <Form className="d-flex justify-content-center gap-4">
+                    <Form className="d-flex justify-content-center gap-4" >
                         <div className="">
                             <FormGroup>
                                 <Label for="firstName">
@@ -157,7 +159,7 @@ export default ({ setRegister }: any) => {
                                 </Dropdown>
                             </div>
                             <div className="d-flex p-4 ">
-                                <Button >
+                                <Button type="button" onClick={(e) => handleSubmit(e)}>
                                     Sign up
                                 </Button>
                                 <Button
