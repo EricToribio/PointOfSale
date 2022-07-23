@@ -18,13 +18,11 @@ export default ({ setRegister }: any) => {
     const [zip,setZip] = useState("");
     const [errors, setErrors] = useState();
     const handleSubmit = (e: any) => {
-        console.log("here")
+        if(firstName === "" || lastName === "" || email === "" || password === "" || confirmPassword != password || address == "" || city == "" || zip === "" || dropDownValue === "State") {
+            return 
+        }
         e.preventDefault();
-        axios.post('http://localhost:8080/api/new/user', {
-            email: email,
-            firstName: firstName,
-            lastName: lastName,
-            password: password,
+        axios.post('http://localhost:8080/api/new/address', {
             address: address,
             city: city,
             state: dropDownValue,
@@ -32,6 +30,17 @@ export default ({ setRegister }: any) => {
         })
             .then(res => {
                 console.log(res)
+                axios.post('http://localhost:8080/api/new/user',{
+                    first_name : firstName,
+                    last_name : lastName,
+                    email : email,
+                    password : password,
+                    confirmPassword : confirmPassword,
+                    addresses_id : res.data["address_id"]
+                })
+                .then(res => {
+                    console.log(res.data)
+                })
 
             }
             )

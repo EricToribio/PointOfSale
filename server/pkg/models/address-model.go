@@ -13,13 +13,14 @@ type Address struct {
 	Zip    string `json:"zip"`
 }
 
-func (a *Address) CreateAddress() *Address {
+func CreateAddress(a *Address) *Address {
 	db.NewRecord(a)
 	db.Create(a)
 	return a
 }
 
-func AddressExists(address Address) (*Address, error) {
+func AddressExists(address *Address) (*Address, error) {
+
 	var PossibleAddress Address
 	db.Find(&PossibleAddress, "street = ? AND city = ? AND state = ? AND zip = ?", address.Street, address.City, address.State, address.Zip)
 	if PossibleAddress.Street == "" {
