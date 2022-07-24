@@ -30,4 +30,8 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 	NewUser := &models.User{}
 	utils.ParseBody(r, NewUser)
 	fmt.Print(NewUser.FirstName, NewUser.Addresses_id)
+	newUser := models.FindUserByEmail(NewUser.Email)
+	if !newUser {
+		models.CreateUser(NewUser)
+	}
 }

@@ -1,8 +1,10 @@
 package models
 
 import (
-	"github.com/jinzhu/gorm"
+	"fmt"
 	"pos/pkg/config"
+
+	"github.com/jinzhu/gorm"
 )
 
 var db *gorm.DB
@@ -23,8 +25,21 @@ func init() {
 	db.AutoMigrate(&Address{}, &User{})
 	db.Debug().Model(&User{}).AddForeignKey("addresses_id", "addresses(id)", "cascade", "cascade")
 }
-func (u *User) CreateUser() *User {
+func CreateUser(u *User) *User {
 	db.NewRecord(u)
 	db.Create(u)
 	return u
+}
+func FindUserByEmail(Email string) bool {
+	var result struct {
+		Found bool
+	}
+	db.Raw("SELECT EXISTS(SELECT 1 FROM users WHERE email = ?) AS found",
+		Email).Scan(&result)
+	if result.Found {
+		fmt.Println("found")
+	} else {
+		fmt.Println("not found")
+	}
+	return result.Found
 }

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { State } from 'country-state-city';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, FormGroup, Input, Label, Button } from 'reactstrap';
 import axios from 'axios';
+import { registrationValidations } from '../helper/validation';
 export default ({ setRegister }: any) => {
     const [states] = useState(State.getStatesOfCountry("US"))
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -16,13 +17,16 @@ export default ({ setRegister }: any) => {
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
     const [zip,setZip] = useState("");
-    const [errors, setErrors] = useState();
+    const [errors, setErrors] = useState(new Map<string,string>());
     const handleSubmit = (e: any) => {
-        if(firstName === "" || lastName === "" || email === "" || password === "" || confirmPassword != password || address == "" || city == "" || zip === "" || dropDownValue === "State") {
-            return 
+        const registrationErrors = registrationValidations(firstName,lastName,email,password,confirmPassword)
+        if (registrationErrors.size > 0) {
+            setErrors(registrationErrors)
+            return
         }
         e.preventDefault();
         axios.post('http://localhost:8080/api/new/address', {
+            first_name: firstName,
             address: address,
             city: city,
             state: dropDownValue,
