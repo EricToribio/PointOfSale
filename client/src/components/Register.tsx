@@ -3,8 +3,9 @@ import { State } from 'country-state-city';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, FormGroup, Input, Label, Button } from 'reactstrap';
 import axios from 'axios';
 import { registrationValidations } from '../helper/validation';
+import { Link } from 'react-router-dom';
 
-export default ({ setRegister }: any) => {
+export default () => {
     const [states] = useState(State.getStatesOfCountry("US"))
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const toggle = () => setDropdownOpen(prevState => !prevState);
@@ -177,14 +178,15 @@ export default ({ setRegister }: any) => {
                                 <Button type="button" onClick={(e) => handleSubmit(e)}>
                                     Sign up
                                 </Button>
+                                <Link to={'/login'}>
                                 <Button
                                     type="button"
-                                    onClick={(e) => setRegister(false)}
                                     className="btn btn-link bg-transparent border-0"
 
                                 >
                                     Already have an Account?
                                 </Button>
+                                </Link>
                             </div>
                         </div>
                     </Form>

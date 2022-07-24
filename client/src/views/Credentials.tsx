@@ -2,27 +2,27 @@ import React ,{useState} from 'react';
 import Login from '../components/Login';
 import Register from '../components/Register';
 
-export default ()=>{
+export default ({page}:any)=>{
     
-    const [register ,setRegister] : any[] = useState(false)
+   
 
     return (
         <div className="container ">
-            {register &&
+            {page === "Register" &&
                 <div>
                     <div className=" p-5">
                         <h1 className="text-center">Sign up</h1>
                     </div>
-                    <Register setRegister={setRegister}/>
+                    <Register/>
                 </div>
             }
             {
-                !register &&
+                page === "Login" &&
                 <div>
                     <div className=" p-5">
                         <h1 className="text-center">Sign in</h1>
                     </div>
-                    <Login setRegister={setRegister}/>
+                    <Login/>
                 </div>
             }
         </div>

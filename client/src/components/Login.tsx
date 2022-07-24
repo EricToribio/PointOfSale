@@ -1,7 +1,8 @@
 import {useState} from 'react';
+import { Link } from 'react-router-dom';
 import { FormGroup, Label, Input, Form, Button } from "reactstrap"
 
-export default ({setRegister} : any) => {
+export default () => {
     const [errors, setErrors] = useState("");
     const [loginInfo, setLoginInfo] = useState({
       email: "",
@@ -25,6 +26,7 @@ export default ({setRegister} : any) => {
                         name="email"
                         placeholder=""
                         type="email"
+                        onChange={(e) => loginChangeHandler(e)}
                     />
                 </FormGroup>
                 <FormGroup>
@@ -36,20 +38,23 @@ export default ({setRegister} : any) => {
                         name="password"
                         placeholder=""
                         type="password"
+                        onChange={(e) => loginChangeHandler(e)}
                     />
                 </FormGroup>
                 <div className="d-flex p-4 ">
                                 <Button >
                                     Sign in
                                 </Button>
-                                <Button
+                                
+          <Link to={"/register"}>
+          <Button
             type="button"
-            onClick={(e) => setRegister(true)}
             className="btn btn-link bg-transparent border-0"
             
           >
               Don't have an Account?
           </Button>
+          </Link>
           </div>
             </Form>
         </div>
