@@ -44,7 +44,6 @@ export default ({setRegister} : any) => {
                                 </Button>
                                 <Button
             type="button"
-            fullWidth
             onClick={(e) => setRegister(true)}
             className="btn btn-link bg-transparent border-0"
             

@@ -3,6 +3,7 @@ import { State } from 'country-state-city';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, FormGroup, Input, Label, Button } from 'reactstrap';
 import axios from 'axios';
 import { registrationValidations } from '../helper/validation';
+
 export default ({ setRegister }: any) => {
     const [states] = useState(State.getStatesOfCountry("US"))
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -18,13 +19,15 @@ export default ({ setRegister }: any) => {
     const [city, setCity] = useState("");
     const [zip,setZip] = useState("");
     const [errors, setErrors] = useState(new Map<string,string>());
+
     const handleSubmit = (e: any) => {
+        e.preventDefault();
         const registrationErrors = registrationValidations(firstName,lastName,email,password,confirmPassword)
+        console.log(registrationErrors)
         if (registrationErrors.size > 0) {
             setErrors(registrationErrors)
             return
         }
-        e.preventDefault();
         axios.post('http://localhost:8080/api/new/address', {
             first_name: firstName,
             address: address,
@@ -162,9 +165,8 @@ export default ({ setRegister }: any) => {
                                         {
                                             states.map((state, i) => {
                                                 if (state.isoCode.length < 3 && state.isoCode !== "PR" && state.isoCode !== "DC" && state.isoCode !== "GU" && state.isoCode !== "MP" && state.isoCode !== "VI" && state.isoCode !== "UM" && state.isoCode !== "AS") {
-                                                    console.log(state.name, state.isoCode)
                                                     return (
-                                                        <DropdownItem onClick={(e) => setDropdownValue(state.isoCode)}>{state.isoCode}</DropdownItem>
+                                                        <DropdownItem key={i} onClick={(e) => setDropdownValue(state.isoCode)}>{state.isoCode}</DropdownItem>
                                                     )
                                                 }
                                             })}
@@ -177,7 +179,6 @@ export default ({ setRegister }: any) => {
                                 </Button>
                                 <Button
                                     type="button"
-                                    fullWidth
                                     onClick={(e) => setRegister(false)}
                                     className="btn btn-link bg-transparent border-0"
 
