@@ -27,11 +27,31 @@ func NewAddress(w http.ResponseWriter, r *http.Request) {
 }
 
 func NewUser(w http.ResponseWriter, r *http.Request) {
+	errors := make(map[string]string)
 	NewUser := &models.User{}
 	utils.ParseBody(r, NewUser)
+	if !models.IsEmailValid(NewUser.Email) {
+		errors["email"] = "Enter a valid email"
+	}
+	if !models.IsValidPassword(NewUser.Password) {
+		errors["password"] = "Password must contain at least one lowercase letter, one uppercase letter, one number, and be at least 8 characters long"
+	}
+	if len(errors) > 0 {
+		res, _ := json.Marshal(errors)
+		w.Write(res)
+		return
+	}
+	NewUser.Password = models.HashPassword(NewUser.Password)
 	fmt.Print(NewUser.FirstName, NewUser.Addresses_id)
 	newUser := models.FindUserByEmail(NewUser.Email)
 	if !newUser {
-		models.CreateUser(NewUser)
+		user := models.CreateUser(NewUser)
+		jwt, err := models.GenerateJwt(user)
+		if err != nil {
+			fmt.Println("Error generating JWT", err.Error())
+		}
+		res, _ := json.Marshal(jwt)
+		w.WriteHeader(http.StatusOK)
+		w.Write(res)
 	}
 }
