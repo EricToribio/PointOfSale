@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import { State } from 'country-state-city';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, FormGroup, Input, Label, Button } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, FormGroup, Input, Label, Button, Alert } from 'reactstrap';
 import axios from 'axios';
-import { registrationValidations } from '../helper/validation';
+import { isAddressValid, registrationValidations } from '../helper/validation';
 import { Link } from 'react-router-dom';
 
 export default () => {
@@ -19,14 +19,18 @@ export default () => {
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
     const [zip,setZip] = useState("");
-    const [errors, setErrors] = useState(new Map<string,string>());
+    const [userErrors, setUserErrors] = useState(new Map<string,string>());
+    const [addressErrors, setAddressErrors] = useState(new Map<string,string>());
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
         const registrationErrors = registrationValidations(firstName,lastName,email,password,confirmPassword)
         console.log(registrationErrors)
-        if (registrationErrors.size > 0) {
-            setErrors(registrationErrors)
+    
+        const addressValidationsErrors = isAddressValid(address, city, dropDownValue,zip)
+        if (registrationErrors.size > 0 ||addressValidationsErrors.size > 0) {
+            setUserErrors(registrationErrors)
+            setAddressErrors(addressValidationsErrors)
             return
         }
         axios.post('http://localhost:8080/api/new/address', {
@@ -70,6 +74,11 @@ export default () => {
                                     type="text"
                                     onChange={(e) => setFirstName(e.target.value)}
                                 />
+                                {userErrors.get("firstName") &&
+                                <Alert color="danger">
+                               {userErrors.get("firstName")}
+                              </Alert>
+                                }
                             </FormGroup> <FormGroup>
                                 <Label for="lastName">
                                     Last Name
@@ -81,6 +90,11 @@ export default () => {
                                     type="text"
                                     onChange={(e) => setLastName(e.target.value)}
                                 />
+                                {userErrors.get("lastName") &&
+                                <Alert color="danger">
+                               {userErrors.get("lastName")}
+                              </Alert>
+                                }
                             </FormGroup>
                             <FormGroup>
                                 <Label for="email">
@@ -93,6 +107,11 @@ export default () => {
                                     type="email"
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
+                                {userErrors.get("email") &&
+                                <Alert color="danger">
+                               {userErrors.get("email")}
+                              </Alert>
+                                }
                             </FormGroup>
                             <FormGroup>
                                 <Label for="password">
@@ -105,6 +124,11 @@ export default () => {
                                     type="password"
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
+                                {userErrors.get("password") &&
+                                <Alert color="danger">
+                               {userErrors.get("password")}
+                              </Alert>
+                                }
                             </FormGroup>
                             <FormGroup>
                                 <Label for="confirm">
@@ -117,7 +141,11 @@ export default () => {
                                     type="password"
                                     onChange={(e) => setConfirmPassword(e.target.value)}
 
-                                />
+                                />{userErrors.get("confirmPassword") &&
+                                <Alert color="danger">
+                               {userErrors.get("confirmPassword")}
+                              </Alert>
+                                }
                             </FormGroup>
                         </div>
                         <div>
@@ -132,6 +160,11 @@ export default () => {
                                     type="text"
                                     onChange={(e) => setAddress(e.target.value)}
                                 />
+                                {addressErrors.get("address") &&
+                                <Alert color="danger">
+                               {addressErrors.get("address")}
+                              </Alert>
+                                }
                             </FormGroup>
                             <FormGroup>
                                 <Label for="city">
@@ -144,6 +177,11 @@ export default () => {
                                     type="text"
                                     onChange={(e) => setCity(e.target.value)}
                                 />
+                                {addressErrors.get("city") &&
+                                <Alert color="danger">
+                               {addressErrors.get("city")}
+                               </Alert>
+}
                             </FormGroup>
                             <FormGroup>
                                 <Label for="zip">
@@ -155,7 +193,11 @@ export default () => {
                                     placeholder=""
                                     type="text"
                                     onChange={(e) => setZip(e.target.value)}
-                                />
+                                />{addressErrors.get("zip") &&
+                                <Alert color="danger">
+                               {addressErrors.get("zip")}
+                               </Alert>
+}
                             </FormGroup>
                             <div className="d-flex p-4 mt-4 ">
                                 <Dropdown isOpen={dropdownOpen} toggle={toggle} cl >
@@ -172,6 +214,11 @@ export default () => {
                                                 }
                                             })}
                                     </DropdownMenu>
+                                    {addressErrors.get("state") &&
+                                <Alert color="danger">
+                               {addressErrors.get("state")}
+                               </Alert>
+}
                                 </Dropdown>
                             </div>
                             <div className="d-flex p-4 ">
