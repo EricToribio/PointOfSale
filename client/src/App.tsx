@@ -12,6 +12,7 @@ import Landing from './views/Landing';
 import Main from './views/Main';
 import jwt_decode from 'jwt-decode';
 import { MyToken } from './helper/validation';
+import Activate from './views/Activate';
 
 
 export default() =>{
@@ -34,6 +35,9 @@ export default() =>{
       </Route>
       <Route exact path='/main'>
         <Main/>
+      </Route>
+      <Route exact path='/activate'>
+        <Activate/>
       </Route>
       </Switch>
       

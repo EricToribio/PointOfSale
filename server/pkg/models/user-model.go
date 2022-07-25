@@ -23,6 +23,7 @@ type User struct {
 	FirstName    string `json:"first_name"`
 	LastName     string `json:"last_name"`
 	Password     string `json:"password"`
+	Active       bool   `json:"active"`
 	Addresses_id uint   `gorm: "foreignkey: addresses_id" json:"addresses_id"`
 }
 
@@ -90,6 +91,7 @@ func GenerateJwt(user *User) (string, error) {
 	claims["firstName"] = user.FirstName
 	claims["lastName"] = user.LastName
 	claims["email"] = user.Email
+	claims["active"] = user.Active
 	claims["exp"] = time.Now().Add(time.Hour * 100).Unix()
 	tokenString, err := token.SignedString(mySigningKey)
 	if err != nil {

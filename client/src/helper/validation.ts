@@ -67,6 +67,14 @@ export interface MyToken {
     firstName: string
     lastName: string
     email: string
+    active: boolean
     exp: number
   }
+  export const loggedInUser = function () {
+      const loggedInUser =  jwt_decode<MyToken>(Cookies.get("user_id")!)
+      return loggedInUser
+
+  }
+  
+  
  
