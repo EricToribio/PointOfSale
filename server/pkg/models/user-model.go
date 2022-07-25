@@ -18,10 +18,10 @@ var mySigningKey = []byte("mysupersecretphrase")
 
 type User struct {
 	gorm.Model
-	Email        string `gorm: "not null" json:"email"`
-	FirstName    string `gorm: "not null"json:"first_name"`
-	LastName     string `gorm: "not null"json:"last_name"`
-	Password     string `gorm: "not null"json:"password"`
+	Email        string `json:"email"`
+	FirstName    string `json:"first_name"`
+	LastName     string `json:"last_name"`
+	Password     string `json:"password"`
 	Addresses_id uint   `gorm: "foreignkey: addresses_id" json:"addresses_id"`
 }
 

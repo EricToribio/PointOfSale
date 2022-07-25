@@ -3,9 +3,10 @@ import { State } from 'country-state-city';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, FormGroup, Input, Label, Button, Alert } from 'reactstrap';
 import axios from 'axios';
 import { isAddressValid, registrationValidations } from '../helper/validation';
-import { Link } from 'react-router-dom';
-
+import { Link, useHistory } from 'react-router-dom';
+import Cookies from 'js-cookie';
 export default () => {
+    const history = useHistory()
     const [states] = useState(State.getStatesOfCountry("US"))
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const toggle = () => setDropdownOpen(prevState => !prevState);
@@ -34,7 +35,6 @@ export default () => {
             return
         }
         axios.post('http://localhost:8080/api/new/address', {
-            first_name: firstName,
             address: address,
             city: city,
             state: dropDownValue,
@@ -52,6 +52,8 @@ export default () => {
                 })
                 .then(res => {
                     console.log(res.data)
+                    Cookies.set("user_id", res.data, { path: '/' })
+                    history.push('/main')
                 })
 
             }

@@ -30,6 +30,7 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 	errors := make(map[string]string)
 	NewUser := &models.User{}
 	utils.ParseBody(r, NewUser)
+
 	if !models.IsEmailValid(NewUser.Email) {
 		errors["email"] = "Enter a valid email"
 	}

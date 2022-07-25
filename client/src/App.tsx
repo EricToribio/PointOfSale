@@ -1,5 +1,5 @@
 
-import './App.css';
+
 import Credentials from './views/Credentials';
 import {
   BrowserRouter,
@@ -10,12 +10,13 @@ import React from 'react';
 import Cookies from "js-cookie"
 import Landing from './views/Landing';
 import Main from './views/Main';
+import jwt_decode,{JwtPayload} from 'jwt-decode';
 
-
-function App() {
+export default() =>{
   const [loggedInUser, setLoggedInUser] = React.useState(
-    Cookies.get("user_id") ? jwt_decode(Cookies.get("user_id")) : "no user"
+    Cookies.get("user_id") ? jwt_decode<JwtPayload>(Cookies.get("user_id")!) : "no user"
   )
+  console.log(loggedInUser)
   return (
     <div className="App">
       <BrowserRouter>
@@ -39,8 +40,5 @@ function App() {
   );
 }
 
-export default App;
-function jwt_decode(arg0: any): any {
-  throw new Error('Function not implemented.');
-}
+
 
