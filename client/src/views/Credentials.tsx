@@ -1,28 +1,34 @@
-import React ,{useState} from 'react';
+import Cookies from 'js-cookie';
+import React ,{useEffect, useState} from 'react';
+import { useHistory } from 'react-router-dom';
 import Login from '../components/Login';
 import Register from '../components/Register';
 
-export default ({page}:any)=>{
-    
+export default (props :{page: any})=>{
+    const history = useHistory()
+    useEffect(() =>{
+        Cookies.get("user_id") && 
+        history.push('/main')
+    })
    
 
     return (
         <div className="container ">
-            {page === "Register" &&
+            {props.page === "Register" &&
                 <div>
                     <div className=" p-5">
                         <h1 className="text-center">Sign up</h1>
                     </div>
-                    <Register/>
+                    <Register />
                 </div>
             }
             {
-                page === "Login" &&
+                props.page === "Login" &&
                 <div>
                     <div className=" p-5">
                         <h1 className="text-center">Sign in</h1>
                     </div>
-                    <Login/>
+                    <Login />
                 </div>
             }
         </div>
