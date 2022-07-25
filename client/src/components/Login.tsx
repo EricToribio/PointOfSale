@@ -1,22 +1,40 @@
-import {useState} from 'react';
-import { Link } from 'react-router-dom';
-import { FormGroup, Label, Input, Form, Button } from "reactstrap"
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { FormEvent, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { FormGroup, Label, Input, Form, Button, Alert } from "reactstrap"
 
 export default () => {
+    const history = useHistory()
     const [errors, setErrors] = useState("");
     const [loginInfo, setLoginInfo] = useState({
-      email: "",
-      password: "",
+        email: "",
+        password: "",
     });
     const loginChangeHandler = (e: any) => {
         setLoginInfo({
-          ...loginInfo,
-          [e.target.name]: e.target.value
+            ...loginInfo,
+            [e.target.name]: e.target.value
         });
-      };
+    };
+const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    axios.post('http://localhost:8080/api/login',loginInfo)
+    .then(res =>{
+        console.log(res.data)
+        if (res.data?.error) {
+        setErrors(res.data.error) }
+        else {
+        Cookies.set("user_id", res.data, { path: '/' })
+        history.push('/main')}
+        
+                    
+    })
+}
+
     return (
         <div className="col-4 card mx-auto p-4">
-            <Form>
+            <Form onSubmit={(e) => handleSubmit(e)}>
                 <FormGroup>
                     <Label for="email">
                         Email
@@ -29,6 +47,10 @@ export default () => {
                         onChange={(e) => loginChangeHandler(e)}
                     />
                 </FormGroup>
+                {errors != "" &&
+                <Alert color="danger">
+                               {errors}
+                              </Alert>}
                 <FormGroup>
                     <Label for="password">
                         Password
@@ -42,20 +64,20 @@ export default () => {
                     />
                 </FormGroup>
                 <div className="d-flex p-4 ">
-                                <Button >
-                                    Sign in
-                                </Button>
-                                
-          <Link to={"/register"}>
-          <Button
-            type="button"
-            className="btn btn-link bg-transparent border-0"
-            
-          >
-              Don't have an Account?
-          </Button>
-          </Link>
-          </div>
+                    <Button >
+                        Sign in
+                    </Button>
+
+                    <Link to={"/register"}>
+                        <Button
+                            type="button"
+                            className="btn btn-link bg-transparent border-0"
+
+                        >
+                            Don't have an Account?
+                        </Button>
+                    </Link>
+                </div>
             </Form>
         </div>
     )

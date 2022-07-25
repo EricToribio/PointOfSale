@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"pos/pkg/config"
 	"regexp"
@@ -96,4 +97,17 @@ func GenerateJwt(user *User) (string, error) {
 		return "", err
 	}
 	return tokenString, nil
+}
+func GetUserByEmail(email string) (*User, error) {
+	var User User
+	db.Find(&User, "email = ?", email)
+	if User.Email == "" {
+		err := errors.New("no user")
+		return &User, err
+	}
+	return &User, errors.New("nil")
+}
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }

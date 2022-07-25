@@ -56,3 +56,31 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 		w.Write(res)
 	}
 }
+
+func NewLogin(w http.ResponseWriter, r *http.Request) {
+	PotentialUser := &models.User{}
+	utils.ParseBody(r, PotentialUser)
+	user, err := models.GetUserByEmail(PotentialUser.Email)
+	if err.Error() == "no user" {
+		res := map[string]string{
+			"error": "Invalid Email or Password",
+		}
+		e, _ := json.Marshal(res)
+		w.Write(e)
+
+	} else if !models.CheckPasswordHash(PotentialUser.Password, user.Password) {
+		res := map[string]string{
+			"error": "Invalid Email or Password",
+		}
+		e, _ := json.Marshal(res)
+		w.Write(e)
+	} else {
+		jwt, err := models.GenerateJwt(user)
+		if err != nil {
+			fmt.Println("Error generating JWT", err.Error())
+		}
+		res, _ := json.Marshal(jwt)
+		w.WriteHeader(http.StatusOK)
+		w.Write(res)
+	}
+}

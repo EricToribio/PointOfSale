@@ -3,14 +3,12 @@ import React ,{useEffect, useState} from 'react';
 import { useHistory } from 'react-router-dom';
 import Login from '../components/Login';
 import Register from '../components/Register';
-
-export default (props :{page: any})=>{
+export default (props :{page: any,})=>{
     const history = useHistory()
     useEffect(() =>{
         Cookies.get("user_id") && 
         history.push('/main')
     })
-   
 
     return (
         <div className="container ">

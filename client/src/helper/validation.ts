@@ -1,4 +1,6 @@
-
+import Cookies from "js-cookie";
+import React from "react";
+import jwt_decode from 'jwt-decode';
 
 export const isAddressValid = function (street: string, city: string, state: string, zip: string) {
 
@@ -59,3 +61,12 @@ export const registrationValidations = function (firstName: string, lastName: st
     return errors
 
 }
+
+export interface MyToken {
+    user_id: string
+    firstName: string
+    lastName: string
+    email: string
+    exp: number
+  }
+ 
