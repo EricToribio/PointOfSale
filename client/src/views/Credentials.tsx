@@ -1,8 +1,8 @@
 import Cookies from 'js-cookie';
 import React ,{useEffect, useState} from 'react';
 import { useHistory } from 'react-router-dom';
-import Login from '../components/Login';
-import Register from '../components/Register';
+import Login from '../components/logAndReg/Login';
+import Register from '../components/logAndReg/Register';
 export default (props :{page: any,})=>{
     const history = useHistory()
     useEffect(() =>{

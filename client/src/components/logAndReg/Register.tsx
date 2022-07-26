@@ -2,7 +2,7 @@ import { SetStateAction, useState } from 'react';
 import { State } from 'country-state-city';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, FormGroup, Input, Label, Button, Alert } from 'reactstrap';
 import axios from 'axios';
-import { isAddressValid, registrationValidations } from '../helper/validation';
+import { isAddressValid, registrationValidations } from '../../helper/validation';
 import { Link, useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 export default () => {
