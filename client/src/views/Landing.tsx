@@ -1,3 +1,4 @@
+import LandingNav from "../components/navBars/LandingNav"
 
 
 
@@ -5,7 +6,7 @@ export default() => {
 
     return(
         <div>
-            <h1>Landing</h1>
+            <LandingNav page="landing"/>
         </div>
     )
 

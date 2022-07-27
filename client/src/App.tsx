@@ -13,6 +13,8 @@ import Main from './views/Main';
 import jwt_decode from 'jwt-decode';
 import { MyToken } from './helper/validation';
 import Activate from './views/Activate';
+import NotFound from './views/NotFound';
+import LandingNav from './components/navBars/LandingNav';
 
 
 export default() =>{
@@ -38,6 +40,9 @@ export default() =>{
       </Route>
       <Route exact path='/activate'>
         <Activate/>
+      </Route>
+      <Route path='*'>
+        <NotFound/>
       </Route>
       </Switch>
       
