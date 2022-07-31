@@ -5,6 +5,9 @@ import jwt_decode from 'jwt-decode'
 import LandingNav from "../components/navBars/LandingNav"
 import Activation from "../components/activation/Activation"
 import { useHistory } from "react-router-dom"
+import ActivateNav from "../components/navBars/ActivateNav"
+
+
 
 
 export default () => {
@@ -16,7 +19,7 @@ export default () => {
 
     return(
         <div>
-            <LandingNav page="activate"/>
+           <ActivateNav/>
             <Activation/>
         </div>
     )

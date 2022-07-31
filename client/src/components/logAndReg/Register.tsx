@@ -274,6 +274,4 @@ export default () => {
     )
 }
 
-function setAddress(value: string): void {
-    throw new Error('Function not implemented.');
-}
+

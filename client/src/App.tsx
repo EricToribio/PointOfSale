@@ -11,6 +11,7 @@ import Main from './views/Main';
 
 import Activate from './views/Activate';
 import NotFound from './views/NotFound';
+import Logout from './views/Logout';
 
 
 
@@ -35,9 +36,13 @@ export default() =>{
       <Route exact path='/activate'>
         <Activate/>
       </Route>
+      <Route exact path='/logout'>
+        <Logout/>
+      </Route>
       <Route path='*'>
         <NotFound/>
       </Route>
+      
       </Switch>
       
       </BrowserRouter>
