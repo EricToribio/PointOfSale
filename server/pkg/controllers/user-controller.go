@@ -8,24 +8,6 @@ import (
 	"pos/pkg/utils"
 )
 
-func NewAddress(w http.ResponseWriter, r *http.Request) {
-	NewAddress := &models.Address{}
-	utils.ParseBody(r, NewAddress)
-	res := make(map[string]uint)
-
-	newAddress, err := models.AddressExists(NewAddress)
-	if err.Error() != "nil" {
-		address := models.CreateAddress(NewAddress)
-		res["address_id"] = address.ID
-	} else {
-		res["address_id"] = newAddress.ID
-	}
-
-	e, _ := json.Marshal(res)
-	w.WriteHeader(http.StatusOK)
-	w.Write(e)
-}
-
 func NewUser(w http.ResponseWriter, r *http.Request) {
 	errors := make(map[string]string)
 	NewUser := &models.User{}
@@ -42,7 +24,7 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 		w.Write(res)
 		return
 	}
-	fmt.Print(NewUser.FirstName, NewUser.Addresses_id)
+	fmt.Print(NewUser.FirstName)
 	newUser := models.FindUserByEmail(NewUser.Email)
 	if !newUser {
 		NewUser.Active = false

@@ -1,18 +1,23 @@
 import Cookies from "js-cookie"
-import React, { useState } from "react"
-import { MyToken , loggedInUser} from "../helper/validation"
+import React, { useEffect, useState } from "react"
+import { MyToken , loggedInUser, checkLoggedInUser} from "../helper/validation"
 import jwt_decode from 'jwt-decode'
+import LandingNav from "../components/navBars/LandingNav"
+import Activation from "../components/activation/Activation"
+import { useHistory } from "react-router-dom"
 
 
 export default () => {
-    const checkLoggedInUser = useState(
-        Cookies.get("user_id") ? jwt_decode<MyToken>(Cookies.get("user_id")!) : "no user"
-        )
-    const loggedIn = loggedInUser()
+    const history = useHistory()
+    useEffect(() =>{
+        !checkLoggedInUser() && 
+        history.push('/')
+    })
 
     return(
         <div>
-            <h1>{loggedIn.active.toString().toUpperCase()}</h1>
+            <LandingNav page="activate"/>
+            <Activation/>
         </div>
     )
 }

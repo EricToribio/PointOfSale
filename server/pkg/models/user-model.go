@@ -19,19 +19,23 @@ var mySigningKey = []byte("mysupersecretphrase")
 
 type User struct {
 	gorm.Model
-	Email        string `json:"email"`
-	FirstName    string `json:"first_name"`
-	LastName     string `json:"last_name"`
-	Password     string `json:"password"`
-	Active       bool   `json:"active"`
-	Addresses_id uint   `gorm: "foreignkey: addresses_id" json:"addresses_id"`
+	Email     string `json:"email"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Password  string `json:"password"`
+	Active    bool   `json:"active"`
+	Admin     bool   `json:"admin"`
+	Owner     bool   `json:"owner"`
+	Shop_id   uint   `gorm: "foreignKey : shop_id" json: shop`
 }
 
 func init() {
 	config.Connect()
 	db = config.GetDB()
-	db.AutoMigrate(&Address{}, &User{})
-	db.Debug().Model(&User{}).AddForeignKey("addresses_id", "addresses(id)", "cascade", "cascade")
+	db.AutoMigrate(&Address{}, &User{}, &Shop{})
+	db.Debug().Model(&Shop{}).AddForeignKey("addresses_id", "addresses(id)", "cascade", "cascade")
+
+	db.Debug().Model(&User{}).AddForeignKey("shop_id", "shops(id)", "cascade", "cascade")
 }
 
 func CreateUser(u *User) *User {

@@ -18,10 +18,7 @@ import LandingNav from './components/navBars/LandingNav';
 
 
 export default() =>{
-  const loggedInUser = React.useState(
-    Cookies.get("user_id") ? jwt_decode<MyToken>(Cookies.get("user_id")!) : "no user"
-    )
-  console.log(loggedInUser)
+  
   return (
     <div className="App">
       <BrowserRouter>

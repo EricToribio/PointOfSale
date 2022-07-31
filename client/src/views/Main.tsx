@@ -1,31 +1,29 @@
 import Cookies from "js-cookie"
 import { MouseEvent, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
-import jwt_decode from 'jwt-decode'
-import { MyToken, loggedInUser } from "../helper/validation"
+import { loggedInUser, checkLoggedInUser } from "../helper/validation"
 
 export default () => {
 
     const history = useHistory()
-    const [checkLoggedInUser] = useState(Cookies.get("user_id") ? jwt_decode<MyToken>(Cookies.get("user_id")!) : "no User")
-    const loggedIn = loggedInUser()
-    const logout = function (e: MouseEvent<HTMLButtonElement, MouseEvent>) {
-        e.preventDefault();
+    
+    const logout = function () {
         Cookies.remove("user_id");
-        history.push('/')
+        return history.push('/')
+
     }
     useEffect(() => {
-        checkLoggedInUser == "no User" &&
+        !checkLoggedInUser()  &&
             history.push('/')
-        console.log(loggedIn)
-        loggedIn.active === false && 
+        
+        loggedInUser().active === false && 
         history.push('/activate')
         
     })
     return (
         <div>
             <h1></h1>
-            <button onClick={() => logout}>logout</button>
+            <button onClick={ logout}>logout</button>
         </div>
 
     )

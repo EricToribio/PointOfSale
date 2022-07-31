@@ -12,14 +12,15 @@ export default () => {
     const toggle = () => setDropdownOpen(prevState => !prevState);
     const [dropDownValue, setDropdownValue] = useState("State")
     // ------------form data------------------//
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [address, setAddress] = useState("");
-    const [city, setCity] = useState("");
-    const [zip,setZip] = useState("");
+    const [firstName, setFirstName] = useState(String);
+    const [lastName, setLastName] = useState(String);
+    const [email, setEmail] = useState(String);
+    const [password, setPassword] = useState(String);
+    const [confirmPassword, setConfirmPassword] = useState(String);
+    const [address, setAddress] = useState(String);
+    const [city, setCity] = useState(String);
+    const [zip,setZip] = useState(String);
+    const [shopName, setShopName] = useState(String);
     const [userErrors, setUserErrors] = useState(new Map<string,string>());
     const [addressErrors, setAddressErrors] = useState(new Map<string,string>());
 
@@ -29,7 +30,7 @@ export default () => {
         console.log(registrationErrors)
     
         const addressValidationsErrors = isAddressValid(address, city, dropDownValue,zip)
-        if (registrationErrors.size > 0 ||addressValidationsErrors.size > 0) {
+        if (registrationErrors.size > 0 || addressValidationsErrors.size > 0) {
             setUserErrors(registrationErrors)
             setAddressErrors(addressValidationsErrors)
             return
@@ -39,7 +40,13 @@ export default () => {
             city: city,
             state: dropDownValue,
             zip: zip,
-        })
+        }).then(res=>{
+            axios.post('http://localhost:8080/api/new/shop', {
+            shopName : shopName,
+            addresses_id : res.data["address_id"]
+            }
+            )
+        
             .then(res => {
                 console.log(res)
                 axios.post('http://localhost:8080/api/new/user',{
@@ -47,22 +54,42 @@ export default () => {
                     last_name : lastName,
                     email : email,
                     password : password,
-                    confirmPassword : confirmPassword,
-                    addresses_id : res.data["address_id"]
+                    shop_id : res.data["shop_id"],
+                    owner : true,
+                    admin : true
+                    
                 })
                 .then(res => {
                     console.log(res.data)
-                    Cookies.set("user_id", res.data, { path: '/' })
-                    history.push('/main')
+                    
                 })
-
+            })
             }
             )
     }
     return (
         <div className="card col-7 mx-auto p-4">
             {states.length !== 0 &&
-                <div className="d-flex justify-content-center gap-4">
+                <div className="">
+                    <FormGroup className=" justify-content-center text-center px-4 mx-5" id="">
+                                <Label className="" for="shopName">
+                                    <h2>
+                                        Shop Name
+                                        </h2>
+                                </Label>
+                                <Input
+                                    id="shopName"
+                                    name="shopName"
+                                    placeholder=""
+                                    type="text"
+                                    onChange={(e) => setShopName(e.target.value)}
+                                />
+                                {userErrors.get("shopName") &&
+                                <Alert color="danger">
+                               {userErrors.get("shopName")}
+                              </Alert>
+                                }
+                            </FormGroup>
                     <Form className="d-flex justify-content-center gap-4" >
                         <div className="">
                             <FormGroup>
@@ -81,7 +108,8 @@ export default () => {
                                {userErrors.get("firstName")}
                               </Alert>
                                 }
-                            </FormGroup> <FormGroup>
+                            </FormGroup> 
+                            <FormGroup>
                                 <Label for="lastName">
                                     Last Name
                                 </Label>

@@ -13,7 +13,7 @@ export default (props :{page: any,})=>{
     })
 
     return (
-        <div className="">
+        <div >
             {props.page === "Register" &&
                 <div>
                     <LandingNav page="register"/>
@@ -28,9 +28,11 @@ export default (props :{page: any,})=>{
                 <div>
                     <LandingNav page="login"/>
                     <div className=" p-5">
-                        <h1 className="text-center">Sign in</h1>
+                       
+                            <h1 className="text-center">Sign in</h1>
+                        
+                        <Login />
                     </div>
-                    <Login />
                 </div>
             }
         </div>

@@ -75,6 +75,12 @@ export interface MyToken {
       return loggedInUser
 
   }
+
+  export const checkLoggedInUser = function () : boolean {
+    const isLoggedIn = Cookies.get("user_id") ?
+    true : false
+    return isLoggedIn
+  }
   
   
  
