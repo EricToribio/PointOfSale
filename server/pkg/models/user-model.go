@@ -88,6 +88,7 @@ func HashPassword(password string) string {
 	return string(bytes)
 }
 func GenerateJwt(user *User) (string, error) {
+	shop := GetShop(user.Shop_id)
 
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
@@ -96,6 +97,8 @@ func GenerateJwt(user *User) (string, error) {
 	claims["lastName"] = user.LastName
 	claims["email"] = user.Email
 	claims["active"] = user.Active
+	claims["owner"] = user.Owner
+	claims["shopName"] = shop.ShopName
 	claims["exp"] = time.Now().Add(time.Hour * 100).Unix()
 	tokenString, err := token.SignedString(mySigningKey)
 	if err != nil {

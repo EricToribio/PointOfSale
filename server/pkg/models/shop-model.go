@@ -20,3 +20,9 @@ func CreateShop(s *Shop) *Shop {
 	db.Create(s)
 	return s
 }
+
+func GetShop(id uint) *Shop {
+	var Shop Shop
+	db.Find(&Shop, "id = ?", id)
+	return &Shop
+}

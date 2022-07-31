@@ -61,7 +61,8 @@ export default () => {
                 })
                 .then(res => {
                     console.log(res.data)
-                    
+                    Cookies.set("user_id", res.data, { path: '/' })
+                    history.push('/main')
                 })
             })
             }

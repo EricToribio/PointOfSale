@@ -36,14 +36,9 @@ export default (props: { page: string }) => {
         <span className="navbar-toggler-icon"></span>
       </button>
 
-      <div className={`${isNavCollapsed ? 'collapse ' : ''} navbar-collapse `} id="navbars"
-      >
-        
+      <div className={`${isNavCollapsed ? 'collapse ' : ''} navbar-collapse `} id="navbars">
         <div className={`${isNavCollapsed ? 'navbar-collapse' : 'position-absolute top-3 end-0 bg-light mt-2'}  `}
-        onMouseOut={!isNavCollapsed ? handleNavCollapse : handleNull}
-        >
-
-
+        onMouseLeave={isNavCollapsed ? handleNull : handleNavCollapse}>
           {
             props.page !== "about" &&
             <a className="nav-link text-info" href="/about" >About Us</a>
