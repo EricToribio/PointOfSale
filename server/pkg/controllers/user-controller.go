@@ -27,7 +27,6 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 	fmt.Print(NewUser.FirstName)
 	newUser := models.FindUserByEmail(NewUser.Email)
 	if !newUser {
-		NewUser.Active = false
 		NewUser.Password = models.HashPassword(NewUser.Password)
 		user := models.CreateUser(NewUser)
 		jwt, err := models.GenerateJwt(user)

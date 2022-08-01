@@ -5,6 +5,7 @@ import "github.com/jinzhu/gorm"
 type Shop struct {
 	gorm.Model
 	ShopName     string `json:"shopName"`
+	Active       bool   `json:"active"`
 	Addresses_id uint   `gorm: "foreignkey: addresses_id" json:"addresses_id"`
 }
 

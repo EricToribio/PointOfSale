@@ -61,15 +61,20 @@ export const registrationValidations = function (firstName: string, lastName: st
     return errors
 
 }
+export interface Shop {
+    shopName : string
+    active : boolean,
+    addresses_id: number
+}
 
 export interface MyToken {
     user_id: string
     firstName: string
     lastName: string
     email: string
-    active: boolean
+    active_employee: boolean
     owner: boolean
-    shopName: string
+    shop: Shop 
     exp: number
   }
   export const loggedInUser = function () {

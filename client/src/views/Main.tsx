@@ -16,7 +16,7 @@ export default () => {
         !checkLoggedInUser()  &&
             history.push('/')
         
-        loggedInUser().active === false && 
+        loggedInUser().shop.active === false && 
         history.push('/activate')
         
     })

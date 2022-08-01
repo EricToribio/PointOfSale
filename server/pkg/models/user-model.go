@@ -19,14 +19,14 @@ var mySigningKey = []byte("mysupersecretphrase")
 
 type User struct {
 	gorm.Model
-	Email     string `json:"email"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Password  string `json:"password"`
-	Active    bool   `json:"active"`
-	Admin     bool   `json:"admin"`
-	Owner     bool   `json:"owner"`
-	Shop_id   uint   `gorm: "foreignKey : shop_id" json: shop`
+	Email          string `json:"email"`
+	FirstName      string `json:"first_name"`
+	LastName       string `json:"last_name"`
+	Password       string `json:"password"`
+	ActiveEmployee bool   `json:"active_employee"`
+	Admin          bool   `json:"admin"`
+	Owner          bool   `json:"owner"`
+	Shop_id        uint   `gorm: "foreignKey : shop_id" json: shop`
 }
 
 func init() {
@@ -96,9 +96,9 @@ func GenerateJwt(user *User) (string, error) {
 	claims["firstName"] = user.FirstName
 	claims["lastName"] = user.LastName
 	claims["email"] = user.Email
-	claims["active"] = user.Active
+	claims["active_employee"] = user.ActiveEmployee
 	claims["owner"] = user.Owner
-	claims["shopName"] = shop.ShopName
+	claims["shop"] = shop
 	claims["exp"] = time.Now().Add(time.Hour * 100).Unix()
 	tokenString, err := token.SignedString(mySigningKey)
 	if err != nil {

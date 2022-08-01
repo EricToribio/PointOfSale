@@ -43,7 +43,8 @@ export default () => {
         }).then(res=>{
             axios.post('http://localhost:8080/api/new/shop', {
             shopName : shopName,
-            addresses_id : res.data["address_id"]
+            addresses_id : res.data["address_id"],
+            active : false
             }
             )
         
@@ -55,6 +56,7 @@ export default () => {
                     email : email,
                     password : password,
                     shop_id : res.data["shop_id"],
+                    active_employee : true,
                     owner : true,
                     admin : true
                     
