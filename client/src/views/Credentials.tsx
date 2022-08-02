@@ -1,14 +1,14 @@
-import Cookies from 'js-cookie';
-import React ,{useEffect, useState} from 'react';
+
+import {useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
 import Login from '../components/logAndReg/Login';
 import Register from '../components/logAndReg/Register';
 import LandingNav from '../components/navBars/LandingNav';
-import Landing from './Landing';
-export default (props :{page: any,})=>{
+import { checkLoggedInUser } from '../helper/validation';
+export default (props :{page: string,})=>{
     const history = useHistory()
     useEffect(() =>{
-        Cookies.get("user_id") && 
+        checkLoggedInUser() && 
         history.push('/main')
     })
 

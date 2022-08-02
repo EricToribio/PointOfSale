@@ -1,16 +1,13 @@
-import Cookies from "js-cookie"
-import React, { useEffect, useState } from "react"
-import { MyToken , loggedInUser, checkLoggedInUser} from "../helper/validation"
-import jwt_decode from 'jwt-decode'
-import LandingNav from "../components/navBars/LandingNav"
+
+import { useEffect, useState } from "react"
+import { loggedInUser, checkLoggedInUser} from "../helper/validation"
 import Activation from "../components/activation/Activation"
 import { useHistory } from "react-router-dom"
 import ActivateNav from "../components/navBars/ActivateNav"
-
-
-
+import ContactAdmin from "../components/activation/ContactAdmin"
 
 export default () => {
+    const [user, setUser] = useState(loggedInUser())
     const history = useHistory()
     useEffect(() =>{
         !checkLoggedInUser() && 
@@ -19,8 +16,13 @@ export default () => {
 
     return(
         <div>
-           <ActivateNav/>
+           <ActivateNav user={user}/>
+           {!user.shop.active && user.owner ?
             <Activation/>
+            :
+            <ContactAdmin/>
+           }
+            
         </div>
     )
 }

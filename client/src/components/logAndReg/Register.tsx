@@ -1,4 +1,4 @@
-import { SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { State } from 'country-state-city';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, FormGroup, Input, Label, Button, Alert } from 'reactstrap';
 import axios from 'axios';

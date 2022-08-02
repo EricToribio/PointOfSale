@@ -77,7 +77,7 @@ export interface MyToken {
     shop: Shop 
     exp: number
   }
-  export const loggedInUser = function () {
+  export const loggedInUser = function () : MyToken {
       const loggedInUser =  jwt_decode<MyToken>(Cookies.get("user_id")!)
       console.log(loggedInUser)
       return loggedInUser
