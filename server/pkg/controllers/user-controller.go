@@ -8,6 +8,13 @@ import (
 	"pos/pkg/utils"
 )
 
+func NewTest(w http.ResponseWriter, r *http.Request) {
+	res := make(map[string]string)
+	res["test"] = "hello from api"
+	e, _ := json.Marshal(res)
+	w.Write(e)
+}
+
 func NewUser(w http.ResponseWriter, r *http.Request) {
 	errors := make(map[string]string)
 	NewUser := &models.User{}
