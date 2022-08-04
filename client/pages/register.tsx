@@ -1,14 +1,15 @@
-import axios from "axios"
-import { useEffect } from "react"
+
+
 import LandingNav from "../components/navBars/landingNav"
 import Register from "../components/logAndReg/register"
+import { useEffect } from "react"
+import { checkLoggedInUser } from "../utils/userUtil"
+import router from "next/router"
 
 export default function register(){
-    useEffect(()=>{
-        axios.get('http://localhost:8080/api/test')
-        .then(res => {
-            console.log(res.data)
-        })
+    useEffect(() =>{
+        checkLoggedInUser() && 
+        router.push('/main')
     })
     return(
         

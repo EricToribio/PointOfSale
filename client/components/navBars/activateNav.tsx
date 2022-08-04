@@ -1,4 +1,5 @@
-import { MyToken } from "../../utils/validation"
+import { MyToken } from "../../utils/userUtil"
+
 
 
 export default (props:{user: MyToken}) => {

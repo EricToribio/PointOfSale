@@ -2,13 +2,11 @@ import { useState } from 'react';
 import { State } from 'country-state-city';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, FormGroup, Input, Label, Button, Alert } from 'reactstrap';
 import axios from 'axios';
-
-import { useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { isAddressValid, registrationValidations } from '../../utils/validation';
+import { isAddressValid, registrationValidations } from '../../utils/validationUtil';
 import Link from 'next/link';
+import router from 'next/router';
 export default () => {
-    const history = useHistory()
     const [states] = useState(State.getStatesOfCountry("US"))
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const toggle = () => setDropdownOpen(prevState => !prevState);
@@ -28,7 +26,7 @@ export default () => {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        const registrationErrors = registrationValidations(firstName, lastName, email, password, confirmPassword)
+        const registrationErrors = registrationValidations(firstName, lastName, email, password, confirmPassword,shopName)
         console.log(registrationErrors)
 
         const addressValidationsErrors = isAddressValid(address, city, dropDownValue, zip)
@@ -37,40 +35,24 @@ export default () => {
             setAddressErrors(addressValidationsErrors)
             return
         }
-        axios.post('http://localhost:8080/api/new/address', {
+        axios.post('http://localhost:8080/api/new/shop', {
             address: address,
             city: city,
             state: dropDownValue,
             zip: zip,
-        }).then(res => {
-            axios.post('http://localhost:8080/api/new/shop', {
-                shopName: shopName,
-                addresses_id: res.data["address_id"],
-                active: false
-            }
-            )
+            shop_name: shopName,
+            active: false,
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            password: password
+        })
+            .then(res => {
+                console.log(res.data)
+                Cookies.set("user_id", res.data, { path: '/',maxAge:3600*7 })
+                router.push('/main')
+            })
 
-                .then(res => {
-                    console.log(res)
-                    axios.post('http://localhost:8080/api/new/user', {
-                        first_name: firstName,
-                        last_name: lastName,
-                        email: email,
-                        password: password,
-                        shop_id: res.data["shop_id"],
-                        active_employee: true,
-                        owner: true,
-                        admin: true
-
-                    })
-                        .then(res => {
-                            console.log(res.data)
-                            Cookies.set("user_id", res.data, { path: '/' })
-                            history.push('/main')
-                        })
-                })
-        }
-        )
     }
     return (
         <div className="card col-7 mx-auto p-4">

@@ -1,14 +1,12 @@
 import Cookies from "js-cookie"
 import router from "next/router"
 import { useEffect } from "react"
+import { checkLoggedInUser, loggedInUser } from "../utils/userUtil"
 
-import { checkLoggedInUser, loggedInUser } from "../utils/validation"
+
 
 
 export default () => {
-
-   
-    
     const logout = function () {
         Cookies.remove("user_id");
         return router.push('/')

@@ -1,21 +1,19 @@
 
-import Router from "next/router"
-import { SetStateAction, useEffect, useState } from "react"
-
-import { useHistory } from "react-router-dom"
+import router from "next/router"
+import { useEffect, useState } from "react"
 import Activation from "../components/activation/activation"
 import ContactAdmin from "../components/activation/contactAdmin"
 import ActivateNav from "../components/navBars/activateNav"
-import { checkLoggedInUser, loggedInUser } from "../utils/validation"
+import { checkLoggedInUser, loggedInUser } from "../utils/userUtil"
+
 
 
 export default () => {
-    const [user, setUser] = useState(loggedInUser())
+    const [user] = useState(loggedInUser())
     
-    const history = useHistory()
     useEffect(() =>{
         !checkLoggedInUser() && 
-        Router.push('/')
+        router.push('/')
     })
 
     return(
