@@ -7,7 +7,7 @@ import { checkLoggedInUser } from "../utils/userUtil";
 export default function login(){
     useEffect(() =>{
         checkLoggedInUser() && 
-        router.push('/main')
+        router.push('/pos/main')
     })
     return(
         <div className="">

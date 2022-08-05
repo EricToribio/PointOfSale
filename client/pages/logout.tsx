@@ -6,7 +6,7 @@ import { useEffect } from "react"
 export default () => {
 useEffect(() =>{
     Cookies.remove("user_id")
-    router.push('/login')
+    router.push('/')
 })
 return(
     <div>

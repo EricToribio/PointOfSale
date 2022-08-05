@@ -1,29 +1,25 @@
 import Cookies from "js-cookie"
 import router from "next/router"
 import { useEffect } from "react"
-import { checkLoggedInUser, loggedInUser } from "../utils/userUtil"
+import { checkLoggedInUser, loggedInUser } from "../../utils/userUtil"
 
 
 
 
 export default () => {
-    const logout = function () {
-        Cookies.remove("user_id");
-        return router.push('/')
-
-    }
+  
     useEffect(() => {
         !checkLoggedInUser()  &&
-            router.push('/')
+            router.push('/login')
         
         loggedInUser().shop.active === false && 
-        router.push('/activate')
+        router.push('/pos/activate')
         
     })
     return (
         <div>
             <h1></h1>
-            <button onClick={ logout}>logout</button>
+            <button >logout</button>
         </div>
 
     )

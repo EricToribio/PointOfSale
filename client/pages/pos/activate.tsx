@@ -1,10 +1,10 @@
 
 import router from "next/router"
 import { useEffect, useState } from "react"
-import Activation from "../components/activation/activation"
-import ContactAdmin from "../components/activation/contactAdmin"
-import ActivateNav from "../components/navBars/activateNav"
-import { checkLoggedInUser, loggedInUser } from "../utils/userUtil"
+import Activation from "../../components/activation/activation"
+import ContactAdmin from "../../components/activation/contactAdmin"
+import ActivateNav from "../../components/navBars/activateNav"
+import { checkLoggedInUser, loggedInUser } from "../../utils/userUtil"
 
 
 
@@ -13,7 +13,7 @@ export default () => {
     
     useEffect(() =>{
         !checkLoggedInUser() && 
-        router.push('/')
+        router.push('/login')
     })
 
     return(

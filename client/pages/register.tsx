@@ -9,7 +9,7 @@ import router from "next/router"
 export default function register(){
     useEffect(() =>{
         checkLoggedInUser() && 
-        router.push('/main')
+        router.push('/pos/main')
     })
     return(
         

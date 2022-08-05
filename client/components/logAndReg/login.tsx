@@ -28,7 +28,7 @@ const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         setErrors(res.data.error) }
         else {
         Cookies.set("user_id", res.data, { path: '/' })
-        router.push('/main')}
+        router.push('/pos/main')}
         
                     
     })

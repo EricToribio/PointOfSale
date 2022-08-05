@@ -9,7 +9,7 @@ import { checkLoggedInUser } from '../utils/userUtil'
 const Home: NextPage = () => {
   useEffect(() =>{
     checkLoggedInUser() && 
-    router.push('/main')
+    router.push('/pos/main')
 })
   return (
     <div>
