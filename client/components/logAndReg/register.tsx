@@ -49,7 +49,7 @@ export default () => {
         })
             .then(res => {
                 console.log(res.data)
-                Cookies.set("user_id", res.data, { path: '/',maxAge:3600*7 })
+                Cookies.set("user_id", res.data, { path: '/'})
                 router.push('/main')
             })
 

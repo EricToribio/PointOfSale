@@ -10,7 +10,7 @@ var (
 )
 
 func Connect() {
-	d, err := gorm.Open("mysql", "root:root@(localhost:3306)/pos_api?parseTime=true")
+	d, err := gorm.Open("mysql", "root:Root@(localhost:3306)/pos_api?parseTime=true")
 	if err != nil {
 		panic(err)
 	}
