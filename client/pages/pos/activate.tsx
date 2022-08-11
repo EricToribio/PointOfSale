@@ -6,28 +6,23 @@ import ContactAdmin from "../../components/activation/contactAdmin"
 import dynamic from "next/dynamic"
 import { checkLoggedInUser, loggedInUser } from "../../utils/userUtil"
 import NonSSRWrapper from "../../utils/no-ssr-wrapper"
+import ActivateNav from "../../components/navBars/activateNav"
 
 
 export default () => {
-    
+    const [user] = useState(loggedInUser())
    
-    const ActiveNav = dynamic(()=> import('../../components/navBars/activateNav'),{ssr:false})
     useEffect(() =>{
         !checkLoggedInUser() && 
         router.push('/login')
-
-        
     })
 
     return(
         <NonSSRWrapper>
 
         <div>
-            <div>
-           <ActiveNav/>
-
-            </div>
-           {!loggedInUser().shop.active && loggedInUser().owner ?
+          <ActivateNav user={user}/>
+           {!user.shop.active && user.owner ?
             <Activation/>
             :
             <ContactAdmin/>
