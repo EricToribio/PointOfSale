@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 
 
 export const isAddressValid = function (street: string, city: string, state: string, zip: string) {
@@ -61,6 +62,12 @@ export const registrationValidations = function (firstName: string, lastName: st
     
     return errors
 
+}
+
+export const active = function () : boolean {
+    const valid = Cookies.get("act")
+    return valid == "true" ? true :false
+    
 }
 
   

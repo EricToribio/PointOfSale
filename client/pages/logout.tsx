@@ -1,13 +1,11 @@
 import Cookies from "js-cookie"
 import router from "next/router"
 import { useEffect } from "react"
+import useLogout from "../hooks/useLogut"
 
 
 export default () => {
-useEffect(() =>{
-    Cookies.remove("user_id")
-    router.push('/')
-})
+useLogout()
 return(
     <div>
         

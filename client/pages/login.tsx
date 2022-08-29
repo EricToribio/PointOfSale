@@ -1,14 +1,11 @@
-import router from "next/router";
-import { useEffect } from "react";
+
 import Login from "../components/logAndReg/login";
 import LandingNav from "../components/navBars/landingNav";
-import { checkLoggedInUser } from "../utils/userUtil";
+import useCheckLoggedIn from "../hooks/useCheckLoggedIn";
+
 
 export default function login(){
-    useEffect(() =>{
-        checkLoggedInUser() && 
-        router.push('/pos/main')
-    })
+    useCheckLoggedIn('login')
     return(
         <div className="">
             <LandingNav page="login"/>

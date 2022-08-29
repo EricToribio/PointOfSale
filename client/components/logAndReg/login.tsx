@@ -1,11 +1,11 @@
-import axios from 'axios';
+
 import Cookies from 'js-cookie';
 import Link from 'next/link';
 import router from 'next/router';
-import Router from 'next/router';
+
 import { FormEvent, useState } from 'react';
-import { useHistory } from 'react-router-dom'
 import { FormGroup, Label, Input, Form, Button, Alert } from "reactstrap"
+import axios from '../../axios/axios';
 
 export default  () => {
     const [errors, setErrors] = useState("");
@@ -19,19 +19,35 @@ export default  () => {
             [e.target.name]: e.target.value
         });
     };
-const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    axios.post('http://localhost:8080/api/login',loginInfo)
-    .then(res =>{
-        console.log(res.data)
-        if (res.data?.error) {
-        setErrors(res.data.error) }
-        else {
-        Cookies.set("user_id", res.data, { path: '/' })
-        router.push('/pos/main')}
-        
-                    
-    })
+const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+        try {
+            const res = await axios.post('login',
+                JSON.stringify(loginInfo), {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            })
+            console.log(res.data)
+            Cookies.set("logout","false",{ path: '/'})
+            Cookies.set("firstName", res.data.firstName, { path: '/' })
+            Cookies.set("lastName", res.data.lastName, { path: '/' })
+            Cookies.set("id", res.data.id, { path: '/' })
+            Cookies.set("shopName", res.data.shopName, { path: '/' })
+            Cookies.set('act',res.data.act, { path: '/' })
+            Cookies.set("admin", res.data.admin, { path: '/' })
+            Cookies.set("owner", res.data.owner, { path: '/' })
+            setLoginInfo({ email: '', password: '' });
+            router.push('/pos/main')
+        } catch (error) {
+            if (!error?.response) {
+                setErrors('No Server Response');
+            } else if (error.response?.status === 401) {
+                console.log(error.response.data.error)
+                setErrors(error.response.data.error);
+            } else {
+                setErrors('Login Failed');
+            }
+    }
 }
 
     return (

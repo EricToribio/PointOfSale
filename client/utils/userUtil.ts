@@ -2,48 +2,41 @@ import jwt_decode from 'jwt-decode';
 import Cookies from "js-cookie";
 export interface Shop {
     shopName : string
-    active : boolean,
-    addresses_id: number
+    active : boolean
+    
 }
 
-export interface MyToken {
-    user_id: number
+export interface MyUser {
+    user_id: number 
     firstName: string
     lastName: string
-    email: string
-    active_employee: boolean
+    admin: boolean
     owner: boolean
-    shop: Shop 
-    exp: number
-  }
-  export const loggedInUser = function () : MyToken {
-    let user : MyToken 
+    shop: Shop
     
-    if(checkLoggedInUser()) {
-        user =  jwt_decode<MyToken>(Cookies.get("user_id")!) 
-        return user
-    }
-    user = {
-        user_id:0,
-        firstName : '',
-        lastName: '',
-        email : '',
-        active_employee: false, 
-        owner: false,
-        shop:{
-            shopName : '',
-            active: false,
-            addresses_id: 0
-        },
-        exp: 0
+  }
+
+  export const GetUser = ()=>{
+  const id :string = Cookies.get('id') ? Cookies.get('id') : ""
+  const firstName: string= Cookies.get('firstName') ? Cookies.get('firstName') : "";
+  const lastName : string= Cookies.get('lastName') ? Cookies.get('lastName') : "";
+  const shopName :string = Cookies.get('shopName') ? Cookies.get('shopName') : "";
+  const admin : boolean = Cookies.get('admin') == 'true' ? true : false
+  const active : boolean = Cookies.get('act') == 'true' ? true : false
+const owner :boolean = Cookies.get('owner') == 'true' ? true : false
+    const user : MyUser = {
+      user_id : parseInt(id),
+      firstName : firstName,
+      lastName : lastName,
+      admin: admin,
+      owner : owner,
+      shop : {
+        shopName: shopName,
+        active : active
+      }
     }
     return user
-  }
 
-  export const checkLoggedInUser = function () : boolean {
-    const isLoggedIn = Cookies.get("user_id") ?
-    true : false
-    return isLoggedIn
   }
-
+  
 

@@ -15,7 +15,7 @@ import (
 )
 
 var db *gorm.DB
-var mySigningKey = []byte("mysupersecretphrase")
+var MySigningKey = []byte("mysupersecretphrase")
 
 type User struct {
 	gorm.Model
@@ -87,25 +87,42 @@ func HashPassword(password string) string {
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(password), 14)
 	return string(bytes)
 }
-func GenerateJwt(user *User) (string, error) {
-	shop := GetShop(user.Shop_id)
+
+func AccessToken(user *User) (string, error) {
 
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
-	claims["user_id"] = user.ID
+	claims["id"] = user.ID
 	claims["firstName"] = user.FirstName
 	claims["lastName"] = user.LastName
-	claims["email"] = user.Email
-	claims["active_employee"] = user.ActiveEmployee
-	claims["owner"] = user.Owner
-	claims["shop"] = shop
-	claims["exp"] = time.Now().Add(time.Hour * 100).Unix()
-	tokenString, err := token.SignedString(mySigningKey)
+	claims["exp"] = time.Now().Add(time.Second * 100).Unix()
+	tokenString, err := token.SignedString(MySigningKey)
 	if err != nil {
 		fmt.Errorf("Something went wrong: %v", err.Error())
 		return "", err
 	}
 	return tokenString, nil
+}
+func RefreshToken(id uint) (string, error) {
+	refreshToken := jwt.New(jwt.SigningMethodHS256)
+	claims := refreshToken.Claims.(jwt.MapClaims)
+	claims["id"] = id
+	claims["exp"] = time.Now().Add(time.Minute * 10).Unix()
+	tokenString, err := refreshToken.SignedString(MySigningKey)
+	if err != nil {
+		fmt.Errorf("Something went wrong: %v", err.Error())
+		return "", err
+	}
+	return tokenString, nil
+}
+func GetUserById(id interface{}) (*User, error) {
+	var User User
+	db.Find(&User, "id = ?", id)
+	if User.ID == 0 {
+		err := errors.New("no user")
+		return &User, err
+	}
+	return &User, errors.New("nil")
 }
 func GetUserByEmail(email string) (*User, error) {
 	var User User

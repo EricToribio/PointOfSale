@@ -2,15 +2,10 @@
 
 import LandingNav from "../components/navBars/landingNav"
 import Register from "../components/logAndReg/register"
-import { useEffect } from "react"
-import { checkLoggedInUser } from "../utils/userUtil"
-import router from "next/router"
+import useCheckLoggedIn from "../hooks/useCheckLoggedIn"
 
 export default function register(){
-    useEffect(() =>{
-        checkLoggedInUser() && 
-        router.push('/pos/main')
-    })
+    useCheckLoggedIn('register')
     return(
         
         <div className="">

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"pos/pkg/models"
 	"pos/pkg/utils"
+	"time"
 )
 
 type NewShop struct {
@@ -67,12 +68,35 @@ func NewShopSignUp(w http.ResponseWriter, r *http.Request) {
 	if !newUser {
 		NewUser.Password = models.HashPassword(NewShop.Password)
 		user := models.CreateUser(NewUser)
-		jwt, err := models.GenerateJwt(user)
+		accessToken, err := models.AccessToken(user)
 		if err != nil {
-			fmt.Println("Error generating JWT", err.Error())
+			fmt.Println("Error generating AccessToken: ", err.Error())
 		}
-		res, _ := json.Marshal(jwt)
+		refreshToken, err := models.RefreshToken(user.ID)
+		if err != nil {
+			fmt.Println("Error generating RefreshToken: ", err.Error())
+		}
+		ShopName := models.GetShop(user.Shop_id)
+		res := map[string]any{
+			"firstName": user.FirstName,
+			"lastName":  user.LastName,
+			"id":        user.ID,
+			"shopName":  ShopName,
+		}
+		e, _ := json.Marshal(res)
+		//fmt.Printf(refreshToken)
+		accessCookie := &http.Cookie{Name: "accessToken", Value: accessToken}
+		accessCookie.HttpOnly = true
+		accessCookie.Path = "/"
+		accessCookie.Expires = time.Now().UTC().AddDate(0, 0, 1)
+		http.SetCookie(w, accessCookie)
+		refreshCookie := &http.Cookie{Name: "refreshToken", Value: refreshToken}
+		refreshCookie.HttpOnly = true
+		refreshCookie.Path = "/"
+		refreshCookie.Expires = time.Now().UTC().AddDate(0, 0, 1)
+		http.SetCookie(w, refreshCookie)
+
 		w.WriteHeader(http.StatusOK)
-		w.Write(res)
+		w.Write(e)
 	}
 }
