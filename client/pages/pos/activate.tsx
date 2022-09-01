@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Activation from "../../components/activation/activation"
 import ContactAdmin from "../../components/activation/contactAdmin"
 import dynamic from "next/dynamic"
-import { checkLoggedInUser, GetUser, loggedInUser } from "../../utils/userUtil"
+import { GetUser } from "../../utils/userUtil"
 import NonSSRWrapper from "../../utils/no-ssr-wrapper"
 import ActivateNav from "../../components/navBars/activateNav"
 import useCheckLoggedIn from "../../hooks/useCheckLoggedIn"
@@ -18,7 +18,6 @@ export default () => {
         const load = () => {
             const user =  GetUser()
             return user
-
         }
         setUser(load())
     },[])
