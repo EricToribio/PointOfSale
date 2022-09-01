@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { State } from 'country-state-city';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, FormGroup, Input, Label, Button, Alert } from 'reactstrap';
-import axios from 'axios';
+
 import Cookies from 'js-cookie';
 import { isAddressValid, registrationValidations } from '../../utils/validationUtil';
 import Link from 'next/link';
 import router from 'next/router';
+import axios from '../../axios/axios';
 export default () => {
+    let errorMessage = new Map<string,string>();
     const [states] = useState(State.getStatesOfCountry("US"))
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const toggle = () => setDropdownOpen(prevState => !prevState);
@@ -24,36 +26,45 @@ export default () => {
     const [userErrors, setUserErrors] = useState(new Map<string, string>());
     const [addressErrors, setAddressErrors] = useState(new Map<string, string>());
 
-    const handleSubmit = (e: any) => {
+    const handleSubmit = async (e : FormEvent<HTMLFormElement> ) => {
         e.preventDefault();
         const registrationErrors = registrationValidations(firstName, lastName, email, password, confirmPassword,shopName)
         console.log(registrationErrors)
 
         const addressValidationsErrors = isAddressValid(address, city, dropDownValue, zip)
-        if (registrationErrors.size > 0 || addressValidationsErrors.size > 0) {
-            setUserErrors(registrationErrors)
-            setAddressErrors(addressValidationsErrors)
-            return
-        }
-        axios.post('http://localhost:8080/api/new/shop', {
-            address: address,
-            city: city,
-            state: dropDownValue,
-            zip: zip,
-            shop_name: shopName,
-            active: false,
-            first_name: firstName,
-            last_name: lastName,
-            email: email,
-            password: password
-        })
-            .then(res => {
-                console.log(res.data)
-                Cookies.set("user_id", res.data, { path: '/'})
-                router.push('/main')
+        // if (registrationErrors.size > 0 || addressValidationsErrors.size > 0) {
+        //     setUserErrors(registrationErrors)
+        //     setAddressErrors(addressValidationsErrors)
+        //     return
+        // }
+        try{
+            const res = await axios.post('new/shop', {
+                address: address,
+                city: city,
+                state: dropDownValue,
+                zip: zip,
+                shopName: shopName,
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: password,
+                confirm: confirmPassword
             })
-
+            console.log(res.data)
+            console.log(res.status)
+        }
+        catch (err) {
+            console.log(err.response.data)
+            for (let i = 0; i < err.response.data.length; i++){
+                errorMessage.set(err.response.data[i].field , err.response.data[i].defaultMessage  )
+            }
+            setUserErrors(errorMessage)
+        }
     }
+      
+          
+             
+    
     return (
         <div className="card col-7 mx-auto p-4">
             {states.length !== 0 &&
@@ -177,9 +188,9 @@ export default () => {
                                     type="text"
                                     onChange={(e) => setAddress(e.target.value)}
                                 />
-                                {addressErrors.get("address") &&
+                                {userErrors.get("address") &&
                                     <Alert color="danger">
-                                        {addressErrors.get("address")}
+                                        {userErrors.get("address")}
                                     </Alert>
                                 }
                             </FormGroup>
@@ -194,9 +205,9 @@ export default () => {
                                     type="text"
                                     onChange={(e) => setCity(e.target.value)}
                                 />
-                                {addressErrors.get("city") &&
+                                {userErrors.get("city") &&
                                     <Alert color="danger">
-                                        {addressErrors.get("city")}
+                                        {userErrors.get("city")}
                                     </Alert>
                                 }
                             </FormGroup>
@@ -210,9 +221,9 @@ export default () => {
                                     placeholder=""
                                     type="text"
                                     onChange={(e) => setZip(e.target.value)}
-                                />{addressErrors.get("zip") &&
+                                />{userErrors.get("zipCode") &&
                                     <Alert color="danger">
-                                        {addressErrors.get("zip")}
+                                        {userErrors.get("zipCode")}
                                     </Alert>
                                 }
                             </FormGroup>

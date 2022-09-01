@@ -18,7 +18,7 @@ public class NewShop {
     private String address;
 
     @NotNull
-    @Size(min = 3)
+    @Size(min = 3,message = "Enter a valid city name")
     private String city;
 
     @NotNull
@@ -26,8 +26,8 @@ public class NewShop {
     private String state;
 
     @NotNull
-    @Size(min = 5, max = 5)
-    private int zipCode;
+    @Size(min = 5, message = "Please enter a valid zipCode")
+    private String zipCode;
 
     @NotNull
     @Size(min = 3, message = "First Name must be at least 3 characters long")
