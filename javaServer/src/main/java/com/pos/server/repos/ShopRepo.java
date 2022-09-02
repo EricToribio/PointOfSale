@@ -10,6 +10,6 @@ import com.pos.server.entity.Shop;
 @Repository
 public interface ShopRepo extends CrudRepository<Shop, Long> {
 
-    Optional<Shop> findById(Long id);
+    Optional<Shop> findById(int id);
     
 }

@@ -4,6 +4,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +16,7 @@ public class NewShop {
     @Size(min=4, message="Shop name must be at least 4 characters long")
     private String shopName;
     @NotNull
-    @Size(min = 5)
+    @Size(min = 5, message = "Enter a valid address")
     private String address;
 
     @NotNull
@@ -24,9 +26,8 @@ public class NewShop {
     @NotNull
     @Size(min = 2,max = 2)
     private String state;
-
     @NotNull
-    @Size(min = 5, message = "Please enter a valid zipCode")
+    @Size(min = 5, max=5,message = "Enter a valid zip code")
     private String zipCode;
 
     @NotNull

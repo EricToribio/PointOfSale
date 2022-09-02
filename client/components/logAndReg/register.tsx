@@ -42,7 +42,7 @@ export default () => {
                 address: address,
                 city: city,
                 state: dropDownValue,
-                zip: zip,
+                zipCode: zip,
                 shopName: shopName,
                 firstName: firstName,
                 lastName: lastName,

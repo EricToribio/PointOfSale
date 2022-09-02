@@ -40,7 +40,7 @@ public class Address {
 
     @NotNull
     @Size(min = 5, max = 5)
-    private int zipCode;
+    private String zipCode;
 
     @Column(updatable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
