@@ -27,6 +27,11 @@ public class ShopService {
     AddressRepo addressRepo;
 
     public User register(NewShop newShop,BindingResult result){
+        Optional<Shop> possibleShop = ShopRepo.findByShopName(newShop.getShopName());
+        if (possibleShop.isPresent()) {
+            result.rejectValue("shopName", "error","Shop already exist");
+            return null;
+        }
 
         Optional<User> isUser = userRepo.findByEmail(newShop.getEmail());
         if (isUser.isPresent()) {
@@ -60,7 +65,7 @@ public class ShopService {
 
         return user;
     }
-    public Shop getShop(int id){
+    public Shop getShop(Long id){
         Optional<Shop> possibleShop = ShopRepo.findById(id);
         
         return possibleShop.get();

@@ -1,5 +1,6 @@
 package com.pos.server.controllers;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +27,7 @@ import com.pos.server.services.UserService;
 public class UserController {
     
     @Autowired
-    private UserService userService;
+    private UserService userServ;
     @Autowired
     private AddressService addressServ;
     @Autowired
@@ -40,9 +42,8 @@ public class UserController {
     return new ResponseEntity<>(register,HttpStatus.valueOf(200));
     }
 
-    @GetMapping("/shop/1")
-    public List<User> getShop(){
-        Shop shop = shopServ.getShop(1);
-        return shop.getUser();
+    @GetMapping("/shop/{id}")
+    public List<HashMap<String, String>> getShop(@PathVariable("id") Long id){
+        return userServ.getUsersByShop(id);
     }
 }
