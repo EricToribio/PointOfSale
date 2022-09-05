@@ -158,16 +158,16 @@ func RefreshAuth(w http.ResponseWriter, r *http.Request) {
 			}
 
 			userCookie := &http.Cookie{Name: "userToken", Value: userToken, Path: "/"}
-			http.SetCookie(w, userCookie)
 			accessCookie = &http.Cookie{Name: "accessToken", Value: accessToken}
 			accessCookie.HttpOnly = true
 			accessCookie.Path = "/"
 			accessCookie.Expires = time.Now().UTC().AddDate(0, 0, 1)
-			http.SetCookie(w, accessCookie)
 			refreshCookie := &http.Cookie{Name: "refreshToken", Value: refreshToken}
 			refreshCookie.HttpOnly = true
 			refreshCookie.Path = "/"
 			refreshCookie.Expires = time.Now().UTC().AddDate(0, 0, 1)
+			http.SetCookie(w, userCookie)
+			http.SetCookie(w, accessCookie)
 			http.SetCookie(w, refreshCookie)
 			e, _ := json.Marshal("success")
 			w.WriteHeader(http.StatusOK)
@@ -225,14 +225,10 @@ func AccessAuth(w http.ResponseWriter, r *http.Request) {
 			}
 			userCookie := &http.Cookie{Name: "userToken", Value: userToken, Path: "/"}
 			http.SetCookie(w, userCookie)
-			accessCookie = &http.Cookie{Name: "accessToken", Value: accessToken}
-			accessCookie.HttpOnly = true
-			accessCookie.Path = "/"
+			accessCookie = &http.Cookie{Name: "accessToken", Value: accessToken, HttpOnly: true, Path: "/"}
 			accessCookie.Expires = time.Now().UTC().AddDate(0, 0, 1)
 			http.SetCookie(w, accessCookie)
-			refreshCookie = &http.Cookie{Name: "refreshToken", Value: refreshToken}
-			refreshCookie.HttpOnly = true
-			refreshCookie.Path = "/"
+			refreshCookie = &http.Cookie{Name: "refreshToken", Value: refreshToken, HttpOnly: true, Path: "/"}
 			refreshCookie.Expires = time.Now().UTC().AddDate(0, 0, 1)
 			http.SetCookie(w, refreshCookie)
 			e, _ := json.Marshal("success")

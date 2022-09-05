@@ -124,7 +124,7 @@ func RefreshToken(id uint) (string, error) {
 	refreshToken := jwt.New(jwt.SigningMethodHS256)
 	claims := refreshToken.Claims.(jwt.MapClaims)
 	claims["id"] = id
-	claims["exp"] = time.Now().Add(time.Minute * 10).Unix()
+	claims["exp"] = time.Now().Add(time.Hour * 100 * 100 * 60).Unix()
 	tokenString, err := refreshToken.SignedString(MySigningKey)
 	if err != nil {
 		fmt.Errorf("Something went wrong: %v", err.Error())
