@@ -64,11 +64,7 @@ export const registrationValidations = function (firstName: string, lastName: st
 
 }
 
-export const active = function () : boolean {
-    const valid = Cookies.get("act")
-    return valid == "true" ? true :false
-    
-}
+
 
   
   

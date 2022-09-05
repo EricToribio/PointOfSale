@@ -7,7 +7,7 @@ const test = () => {
 
         
         try {
-            const res = await axios.get('shop/2')
+            const res = await axios.get('shop/3')
             console.log(res.data)
         } catch (error) {
             

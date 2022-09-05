@@ -3,7 +3,9 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
 	"net/http"
+	"pos/middleware"
 	"pos/pkg/models"
 	"pos/pkg/utils"
 	"time"
@@ -99,4 +101,52 @@ func NewShopSignUp(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write(e)
 	}
+}
+
+func GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, ok := vars["id"]
+	if !ok {
+		fmt.Println("id is missing in parameters")
+	}
+	e, _ := json.Marshal(id)
+	w.WriteHeader(http.StatusOK)
+	w.Write(e)
+
+}
+func Activate(w http.ResponseWriter, r *http.Request) {
+	accessCookie, _ := r.Cookie("accessToken")
+	refreshToken, _ := r.Cookie("refreshToken")
+	tokenString := accessCookie.Value
+	_, claims, _ := middleware.VerifyToken(tokenString)
+	if middleware.IsExpired(claims["exp"]) {
+		tokenString := refreshToken.Value
+		_, claims, _ = middleware.VerifyToken(tokenString)
+		if middleware.IsExpired(claims["exp"]) {
+			fmt.Print("expired token")
+			res := map[string]string{
+				"error": "Session expired",
+			}
+			e, _ := json.Marshal(res)
+			w.WriteHeader(401)
+			w.Write(e)
+			return
+		}
+	}
+	user, err := models.GetUserById(claims["id"])
+	if err.Error() == "no user" {
+		fmt.Println(err.Error())
+		res := map[string]string{
+			"error": "No User",
+		}
+		e, _ := json.Marshal(res)
+		w.WriteHeader(401)
+		w.Write(e)
+	}
+	shop := models.GetShop(user.Shop_id)
+	models.UpdateShop(shop)
+
+	e, _ := json.Marshal("success")
+	w.WriteHeader(200)
+	w.Write(e)
 }

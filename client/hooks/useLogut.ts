@@ -21,13 +21,6 @@ function useLogout() {
                     var Cookie_expiry = new Date();
 Cookie_expiry.setDate(Cookie_expiry.getDate()+10e5);  
                     Cookies.set('logout','true',{ path: '/',expires : Cookie_expiry})
-                    Cookies.remove("firstName")
-                    Cookies.remove("lastName")
-                    Cookies.remove("id")
-                    Cookies.remove("shopName")
-                    Cookies.remove("act")
-                    Cookies.remove('owner')
-                    Cookies.remove('admin')
                     router.push('/login')
                   }
             } catch (err : Error) {

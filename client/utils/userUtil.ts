@@ -1,5 +1,6 @@
-import jwt_decode from 'jwt-decode';
+import jwt_decode from "jwt-decode";
 import Cookies from "js-cookie";
+import { useState } from "react";
 export interface Shop {
     shopName : string
     active : boolean
@@ -7,7 +8,7 @@ export interface Shop {
 }
 
 export interface MyUser {
-    user_id: number 
+    id: number
     firstName: string
     lastName: string
     admin: boolean
@@ -16,27 +17,24 @@ export interface MyUser {
     
   }
 
-  export const GetUser = ()=>{
-  const id :string = Cookies.get('id') ? Cookies.get('id') : ""
-  const firstName: string= Cookies.get('firstName') ? Cookies.get('firstName') : "";
-  const lastName : string= Cookies.get('lastName') ? Cookies.get('lastName') : "";
-  const shopName :string = Cookies.get('shopName') ? Cookies.get('shopName') : "";
-  const admin : boolean = Cookies.get('admin') == 'true' ? true : false
-  const active : boolean = Cookies.get('act') == 'true' ? true : false
-const owner :boolean = Cookies.get('owner') == 'true' ? true : false
+  export const GetUser =  () : MyUser=>{
+    const userCookie : string = Cookies.get("userToken")
+      const userToken : MyUser=  jwt_decode(userCookie)
     const user : MyUser = {
-      user_id : parseInt(id),
-      firstName : firstName,
-      lastName : lastName,
-      admin: admin,
-      owner : owner,
-      shop : {
-        shopName: shopName,
-        active : active
-      }
+      id : userToken.id,
+      firstName : userToken.firstName,
+      lastName : userToken.lastName,
+      admin: userToken.admin,
+      owner : userToken.owner,
+      shop : userToken.shop
     }
+    console.log(user)
     return user
-
   }
+  export const active = function () : boolean {
+    const valid = GetUser()
+    return valid.shop.active 
+    
+}
   
 

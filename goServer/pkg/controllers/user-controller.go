@@ -39,17 +39,13 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println("Error generating RefreshToken: ", err.Error())
 		}
-		ShopName := models.GetShop(user.Shop_id)
-		res := map[string]any{
-			"firstName": user.FirstName,
-			"lastName":  user.LastName,
-			"id":        user.ID,
-			"shopName":  ShopName.ShopName,
-			"owner":     user.Owner,
-			"admin":     user.Admin,
-			"act":       ShopName.Active,
+		userToken, err := models.UserToken(user)
+		if err != nil {
+			fmt.Println("Error generating RefreshToken: ", err.Error())
 		}
-		//fmt.Printf(refreshToken)
+
+		userCookie := &http.Cookie{Name: "userToken", Value: userToken, Path: "/"}
+		http.SetCookie(w, userCookie)
 		accessCookie := &http.Cookie{Name: "accessToken", Value: accessToken}
 		accessCookie.HttpOnly = true
 		accessCookie.Expires = time.Now().UTC().AddDate(0, 0, 1)
@@ -58,7 +54,7 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 		refreshCookie.HttpOnly = true
 		refreshCookie.Expires = time.Now().UTC().AddDate(0, 0, 1)
 		http.SetCookie(w, refreshCookie)
-		e, _ := json.Marshal(res)
+		e, _ := json.Marshal("success")
 		w.WriteHeader(http.StatusOK)
 		w.Write(e)
 	}
@@ -93,17 +89,13 @@ func NewLogin(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println("Error generating RefreshToken: ", err.Error())
 		}
-		ShopName := models.GetShop(user.Shop_id)
-		res := map[string]any{
-			"firstName": user.FirstName,
-			"lastName":  user.LastName,
-			"id":        user.ID,
-			"shopName":  ShopName.ShopName,
-			"owner":     user.Owner,
-			"admin":     user.Admin,
-			"act":       ShopName.Active,
+		userToken, err := models.UserToken(user)
+		if err != nil {
+			fmt.Println("Error generating RefreshToken: ", err.Error())
 		}
-		//fmt.Printf(refreshToken)
+
+		userCookie := &http.Cookie{Name: "userToken", Value: userToken, Path: "/"}
+		http.SetCookie(w, userCookie)
 		accessCookie := &http.Cookie{Name: "accessToken", Value: accessToken}
 		accessCookie.HttpOnly = true
 		accessCookie.Expires = time.Now().UTC().AddDate(0, 0, 1)
@@ -112,13 +104,14 @@ func NewLogin(w http.ResponseWriter, r *http.Request) {
 		refreshCookie.HttpOnly = true
 		refreshCookie.Expires = time.Now().UTC().AddDate(0, 0, 1)
 		http.SetCookie(w, refreshCookie)
-		e, _ := json.Marshal(res)
+		e, _ := json.Marshal("success")
 		w.WriteHeader(http.StatusOK)
 		w.Write(e)
 	}
 }
 func RefreshAuth(w http.ResponseWriter, r *http.Request) {
 	refreshToken, _ := r.Cookie("refreshToken")
+	accessCookie, _ := r.Cookie("accessToken")
 	tokenString := refreshToken.Value
 	token, claims, err := middleware.VerifyToken(tokenString)
 	if middleware.IsExpired(claims["exp"]) {
@@ -159,20 +152,14 @@ func RefreshAuth(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				fmt.Println("Error generating RefreshToken: ", err.Error())
 			}
-			ShopName := models.GetShop(user.Shop_id)
-			fmt.Print(ShopName)
-			res := map[string]any{
-				"firstName": user.FirstName,
-				"lastName":  user.LastName,
-				"id":        user.ID,
-				"shopName":  ShopName.ShopName,
-				"act":       ShopName.Active,
-				"admin":     user.Admin,
-				"owner":     user.Owner,
+			userToken, err := models.UserToken(user)
+			if err != nil {
+				fmt.Println("Error generating RefreshToken: ", err.Error())
 			}
-			e, _ := json.Marshal(res)
-			//fmt.Printf(refreshToken)
-			accessCookie := &http.Cookie{Name: "accessToken", Value: accessToken}
+
+			userCookie := &http.Cookie{Name: "userToken", Value: userToken, Path: "/"}
+			http.SetCookie(w, userCookie)
+			accessCookie = &http.Cookie{Name: "accessToken", Value: accessToken}
 			accessCookie.HttpOnly = true
 			accessCookie.Path = "/"
 			accessCookie.Expires = time.Now().UTC().AddDate(0, 0, 1)
@@ -182,6 +169,7 @@ func RefreshAuth(w http.ResponseWriter, r *http.Request) {
 			refreshCookie.Path = "/"
 			refreshCookie.Expires = time.Now().UTC().AddDate(0, 0, 1)
 			http.SetCookie(w, refreshCookie)
+			e, _ := json.Marshal("success")
 			w.WriteHeader(http.StatusOK)
 			w.Write(e)
 		}
@@ -231,19 +219,12 @@ func AccessAuth(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				fmt.Println("Error generating RefreshToken: ", err.Error())
 			}
-			ShopName := models.GetShop(user.Shop_id)
-			fmt.Print(ShopName)
-			res := map[string]any{
-				"firstName": user.FirstName,
-				"lastName":  user.LastName,
-				"id":        user.ID,
-				"shopName":  ShopName.ShopName,
-				"act":       ShopName.Active,
-				"admin":     user.Admin,
-				"owner":     user.Owner,
+			userToken, err := models.UserToken(user)
+			if err != nil {
+				fmt.Println("Error generating RefreshToken: ", err.Error())
 			}
-			e, _ := json.Marshal(res)
-			//fmt.Printf(refreshToken)
+			userCookie := &http.Cookie{Name: "userToken", Value: userToken, Path: "/"}
+			http.SetCookie(w, userCookie)
 			accessCookie = &http.Cookie{Name: "accessToken", Value: accessToken}
 			accessCookie.HttpOnly = true
 			accessCookie.Path = "/"
@@ -254,7 +235,7 @@ func AccessAuth(w http.ResponseWriter, r *http.Request) {
 			refreshCookie.Path = "/"
 			refreshCookie.Expires = time.Now().UTC().AddDate(0, 0, 1)
 			http.SetCookie(w, refreshCookie)
-
+			e, _ := json.Marshal("success")
 			w.WriteHeader(http.StatusOK)
 			w.Write(e)
 		}
@@ -264,20 +245,17 @@ func AccessAuth(w http.ResponseWriter, r *http.Request) {
 func Logout(w http.ResponseWriter, r *http.Request) {
 	accessCookie, _ := r.Cookie("accessToken")
 	refreshCookie, _ := r.Cookie("refreshToken")
+	userCookie, _ := r.Cookie("userToken")
 	res := map[string]string{
 		"success": "Logout successful",
 	}
-	e, _ := json.Marshal(res)
-	accessCookie = &http.Cookie{Name: "accessToken", Value: "123", Path: "/"}
-	accessCookie.HttpOnly = true
-	accessCookie.Path = "/"
-	accessCookie.MaxAge = -1
-	refreshCookie = &http.Cookie{Name: "refreshToken", Value: "123", Path: "/"}
-	refreshCookie.Path = "/"
-	refreshCookie.HttpOnly = true
-	refreshCookie.MaxAge = -1
+	userCookie = &http.Cookie{Name: "userToken", Value: "123", Path: "/", MaxAge: -1}
+	accessCookie = &http.Cookie{Name: "accessToken", Value: "123", Path: "/", MaxAge: -1}
+	refreshCookie = &http.Cookie{Name: "refreshToken", Value: "123", Path: "/", MaxAge: -1}
+	http.SetCookie(w, userCookie)
 	http.SetCookie(w, accessCookie)
 	http.SetCookie(w, refreshCookie)
+	e, _ := json.Marshal(res)
 	w.WriteHeader(http.StatusOK)
 	w.Write(e)
 }

@@ -22,18 +22,9 @@ function useCheckLoggedIn(page: string) {
         const res = await axios.get('acc/auth',{
           headers: {
             'Content-Type': 'application/json'
-          },
-          withCredentials: true
+          }  
         })
-        console.log("access",res.data)
-          Cookies.set("firstName", res.data.firstName, { path: '/' })
-          Cookies.set("lastName", res.data.lastName, { path: '/' })
-          Cookies.set("id", res.data.id, { path: '/' })
-          Cookies.set("shopName",res.data.shopName, { path: '/' }) 
-          Cookies.set('act',res.data.act, { path: '/' })
-          Cookies.set("logout", "false", { path: '/' })
-          Cookies.set("admin", res.data.admin, { path: '/' })
-          Cookies.set("owner", res.data.owner, { path: '/' })
+        console.log("access")
           if (res?.status === 200) {
             if (page === 'login' || page === 'register' || page === '') {
               router.push('/pos/main')
@@ -46,20 +37,9 @@ function useCheckLoggedIn(page: string) {
           const res = await axios.get('ref/auth', {
             headers: {
               'Content-Type': 'application/json'
-            },
-            withCredentials: true
+            }
           })
-          console.log("refresh",res.data)
-          Cookies.set("firstName", res.data.firstName, { path: '/' })
-          Cookies.set("lastName", res.data.lastName, { path: '/' })
-          Cookies.set("shopName",res.data.shopName, { path: '/' }) 
-          Cookies.set("logout", "false", { path: '/' })
-          Cookies.set('act',res.data.act, { path: '/' })
-          Cookies.set("id", res.data.id, { path: '/' })
-          Cookies.set("admin", res.data.admin, { path: '/' })
-          Cookies.set("owner", res.data.owner, { path: '/' })
-
-            ;
+          console.log("refresh")
           if (res?.status === 200) {
             if (page === 'login' || page === 'register' || page === '') {
               router.push('/main')

@@ -1,13 +1,22 @@
 import Link from "next/link";
-import { MouseEvent } from "react"
+import router from "next/router";
 import { Button } from "reactstrap"
+import axios from "../../axios/axios";
 
 
 export default ()=>{
 
-    function handleClick(e:  React.MouseEvent<HTMLButtonElement> ) {
+    const handleClick = async (e:  React.MouseEvent<HTMLButtonElement> ) => {
        e.preventDefault();
         console.log(e.currentTarget.name,e.currentTarget.id)
+        try{
+            const res = await axios.put('shop/activate')
+              console.log(res)
+              router.push('/pos/main')
+         }catch(err){
+            console.log(err.response)
+           
+         }
     }
 
     return(

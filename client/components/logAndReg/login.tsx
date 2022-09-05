@@ -29,15 +29,8 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
             })
             console.log(res.data)
             Cookies.set("logout","false",{ path: '/'})
-            Cookies.set("firstName", res.data.firstName, { path: '/' })
-            Cookies.set("lastName", res.data.lastName, { path: '/' })
-            Cookies.set("id", res.data.id, { path: '/' })
-            Cookies.set("shopName", res.data.shopName, { path: '/' })
-            Cookies.set('act',res.data.act, { path: '/' })
-            Cookies.set("admin", res.data.admin, { path: '/' })
-            Cookies.set("owner", res.data.owner, { path: '/' })
             setLoginInfo({ email: '', password: '' });
-            router.push('/pos/main')
+            router.push('pos/main')
         } catch (error) {
             if (!error?.response) {
                 setErrors('No Server Response');

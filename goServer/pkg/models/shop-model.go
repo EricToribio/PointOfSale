@@ -1,6 +1,8 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/jinzhu/gorm"
+)
 
 type Shop struct {
 	gorm.Model
@@ -26,4 +28,9 @@ func GetShop(id uint) *Shop {
 	var Shop Shop
 	db.Find(&Shop, "id = ?", id)
 	return &Shop
+}
+
+func UpdateShop(shop *Shop) {
+
+	db.Model(&shop).Select("active").Updates(Shop{Active: true})
 }

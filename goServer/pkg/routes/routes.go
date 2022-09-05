@@ -20,4 +20,6 @@ var AddressRoutes = func(router *mux.Router) {
 
 var ShopRoutes = func(router *mux.Router) {
 	router.HandleFunc("/api/new/shop", controllers.NewShopSignUp).Methods("POST")
+	router.HandleFunc("/api/shop/{id}", controllers.GetAllUsers).Methods("GET")
+	router.HandleFunc("/api/shop/activate", controllers.Activate).Methods("PUT")
 }

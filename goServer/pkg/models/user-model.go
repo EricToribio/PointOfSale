@@ -34,7 +34,6 @@ func init() {
 	db = config.GetDB()
 	db.AutoMigrate(&Address{}, &User{}, &Shop{})
 	db.Debug().Model(&Shop{}).AddForeignKey("addresses_id", "addresses(id)", "cascade", "cascade")
-
 	db.Debug().Model(&User{}).AddForeignKey("shop_id", "shops(id)", "cascade", "cascade")
 }
 
@@ -87,7 +86,25 @@ func HashPassword(password string) string {
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(password), 14)
 	return string(bytes)
 }
+func UserToken(user *User) (string, error) {
+	ShopName := GetShop(user.Shop_id)
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["id"] = user.ID
+	claims["firstName"] = user.FirstName
+	claims["lastName"] = user.LastName
+	claims["owner"] = user.Owner
+	claims["admin"] = user.Admin
+	claims["shop"] = ShopName
 
+	claims["exp"] = time.Now().Add(time.Second * 100).Unix()
+	tokenString, err := token.SignedString(MySigningKey)
+	if err != nil {
+		fmt.Errorf("Something went wrong: %v", err.Error())
+		return "", err
+	}
+	return tokenString, nil
+}
 func AccessToken(user *User) (string, error) {
 
 	token := jwt.New(jwt.SigningMethodHS256)
