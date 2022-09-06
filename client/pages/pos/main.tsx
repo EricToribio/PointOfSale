@@ -1,6 +1,8 @@
 import Cookies from "js-cookie"
 import router from "next/router"
 import { useEffect, useState } from "react"
+import OpenInvoices from "../../components/mainComponents/openInvoices"
+import TableHeader from "../../components/mainComponents/tableHeader"
 import MainNav from "../../components/navBars/mainNav"
 import useCheckLoggedIn from "../../hooks/useCheckLoggedIn"
 import {  active, GetUser, MyUser } from "../../utils/userUtil"
@@ -27,7 +29,11 @@ export default () => {
         {loaded &&
         <div>
                 <MainNav user={user} page={page}/>
-                
+                <div className=" ">
+                <TableHeader/>
+                <OpenInvoices/>
+                </div>
+
         </div>
                 
             }
