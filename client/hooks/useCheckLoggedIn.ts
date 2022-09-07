@@ -42,7 +42,7 @@ function useCheckLoggedIn(page: string) {
           console.log("refresh")
           if (res?.status === 200) {
             if (page === 'login' || page === 'register' || page === '') {
-              router.push('/main')
+              router.push('/pos/main')
             }
           }
         } catch (err) {

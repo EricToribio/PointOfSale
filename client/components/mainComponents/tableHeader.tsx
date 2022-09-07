@@ -1,16 +1,28 @@
+import { Dispatch, SetStateAction } from "react"
+import { tableHeaders } from "../../utils/tableHeader"
 
 
-export default ()=>{
+export default (props:{tab:String,setTab:Dispatch<SetStateAction<String>>})=>{
+
+    const activeLink = "bg-danger"
+    const inactiveLink = "bg-dark text-light"
+    const tabStyle = " border-0"
+    
 
     return(
         <div className="d-flex justify-content-center ">
-            <table className="border border-color-dark">
+            <table className="">
                 <thead>
                     <tr>
-                        <td><button>Open Invoices</button></td>
-                        <td><button>Waiting for Pick up</button></td>
-                        <td><button>Paid Invoices</button></td>
-                        <td><button>All Invoices</button></td>
+                        {tableHeaders.map((item,i)=>{
+                            let linkStyle = ``;
+                            props.tab === item.Tab ? (linkStyle += `${activeLink}`) :
+                            (linkStyle += `${inactiveLink}`);
+                            return(
+                                <td><button className={linkStyle +tabStyle} onClick={() => props.setTab(item.Tab)}>{item.Name}</button></td>
+
+                            )
+                        })}
                         
                     </tr>
                 </thead>
