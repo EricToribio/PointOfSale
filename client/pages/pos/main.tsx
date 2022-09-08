@@ -19,7 +19,7 @@ export default () => {
     const [tab, setTab] = useState<String>("openInvoices")
     const [loaded, setLoaded] = useState<boolean>(false);
     const [user,setUser] = useState<MyUser>();
-    const [page, setPage] = useState<String>("main");
+  
     useEffect(() => {
         active() ?(
         setUser(GetUser()),
@@ -32,7 +32,7 @@ export default () => {
         <div>
         {loaded &&
         <div>
-                <MainNav user={user} page={page}/>
+                <MainNav user={user} page={"main"}/>
                 <div className=" ">
                 <TableHeader tab={tab} setTab={setTab}/>
                 {
