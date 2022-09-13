@@ -52,6 +52,7 @@ export default () => {
             })
             console.log(res.data)
             console.log(res.status)
+            router.push('/pos/main')
         }
         catch (err) {
             console.log(err.response.data)
