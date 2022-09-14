@@ -25,7 +25,7 @@ export default () => {
           isNewCustomer ?
           <WorkOrderCustomerForm customer={customer} setNewCustomer={setCustomer}/>
           :
-          <CustomerLookup user={user}  setIsNewCustomer={setIsNewCustomer}/>
+          <CustomerLookup user={user}   setIsNewCustomer={setIsNewCustomer}/>
         }
       </div>
 

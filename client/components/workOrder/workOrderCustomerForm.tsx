@@ -24,7 +24,7 @@ export default () => {
     const [addressErrors, setAddressErrors] = useState(new Map<string, string>());
     return (
 
-        <Form className="d-flex p-4 gap-4" >
+        <Form className="d-flex px-4 gap-4" >
             <div className="border rounded border-dark p-4">
                 <h3 className="text-center">Customer</h3>
                 <div className=" d-flex gap-4  ">
@@ -144,7 +144,8 @@ export default () => {
                                 </Alert>
                             }
                         </FormGroup>
-                        <div className="d-flex p-4 mt-4 ">
+                        <br/>
+                        <div className="d-flex justify-content-center  mt-3 ">
                             <Dropdown
                                 isOpen={dropdownOpen}
                                 toggle={toggle}
@@ -203,6 +204,8 @@ export default () => {
                             name="model"
                             />
                         </FormGroup>
+                    </div>
+                    <div>
                         <FormGroup>
                             <Label for="vin">
                                 Vin
@@ -212,8 +215,6 @@ export default () => {
                             name="vin"
                             />
                         </FormGroup>
-                    </div>
-                    <div>
                         <FormGroup>
                             <Label for="plate">
                                 Plate
@@ -223,9 +224,20 @@ export default () => {
                             name="plate"
                             />
                         </FormGroup>
-                                    <div className=" ">
+                        <FormGroup>
+                            <Label for="engineSize">
+                                Engine Size
+                            </Label>
+                            <Input
+                            type="number"
+                            id="engineSize"
+                            name="engineSize"
+                            />
+                                                    </FormGroup>
+                                                    <br/>
+                                    <div className="d-flex justify-content-end pt-4 ">
                         <Button type="button" onClick={(e) => handleSubmit(e)}>
-                            Sign up
+                            Submit
                         </Button>
                                     </div>
                     </div>
