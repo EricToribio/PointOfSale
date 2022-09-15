@@ -10,5 +10,11 @@ type Vehicle struct {
 	Plate        string `json:"plate"`
 	Year         int64  `json:"year"`
 	EngineSize   int64  `json:"engineSize"`
-	User_id      uint   `gorm: "foreignkey : user_id" json: "user_id"`
+	Customer_id  uint   `gorm: "foreignkey : Customer_id" json: "customer_id"`
+}
+
+func CreateVehicle(v *Vehicle) *Vehicle {
+	db.NewRecord(v)
+	db.Create(v)
+	return v
 }

@@ -13,7 +13,7 @@ export default  () => {
         email: "",
         password: "",
     });
-    const loginChangeHandler = (e: any) => {
+    const loginChangeHandler = (e: FormEvent<HTMLFormElement>) => {
         setLoginInfo({
             ...loginInfo,
             [e.target.name]: e.target.value

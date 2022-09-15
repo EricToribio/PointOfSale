@@ -23,3 +23,7 @@ var ShopRoutes = func(router *mux.Router) {
 	router.HandleFunc("/api/shop/{id}", controllers.GetAllUsers).Methods("GET")
 	router.HandleFunc("/api/shop/activate", controllers.Activate).Methods("PUT")
 }
+
+var CustomerRoutes = func(router *mux.Router) {
+	router.HandleFunc("/api/new/customer", controllers.NewCustomer).Methods("POST")
+}

@@ -1,4 +1,4 @@
-interface Address {
+export interface Address {
     address: string;
     city: string;
     zip: string;
@@ -6,20 +6,29 @@ interface Address {
 }
 
 export interface Vehicle {
+    year: number;
     id: number;
     vin: string;
     make: string;
     model: string;
     plate: string;
+    engineSize : number
+}
+
+export interface Customer {
+    firstName: string ;
+    lastName: string;
+    email: string;
+    phone: string;
 }
 
 export interface MyCustomer {
-    firstName: string;
-    lastName: string;
-    phone: number;
+    customer: Customer;
     address: Address;
     vehicles : Vehicle[];
 }
+
+
 
 
 

@@ -16,6 +16,8 @@ func main() {
 	routes.UserRoutes(r)
 	routes.AddressRoutes(r)
 	routes.ShopRoutes(r)
+	routes.CustomerRoutes(r)
+
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},

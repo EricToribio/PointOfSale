@@ -3,19 +3,14 @@ package models
 import (
 	"errors"
 	"fmt"
-	"pos/pkg/config"
 	"regexp"
 	"time"
 	"unicode"
 
 	jwt "github.com/dgrijalva/jwt-go"
-	"golang.org/x/crypto/bcrypt"
-
 	"github.com/jinzhu/gorm"
+	"golang.org/x/crypto/bcrypt"
 )
-
-var db *gorm.DB
-var MySigningKey = []byte("mysupersecretphrase")
 
 type User struct {
 	gorm.Model
@@ -27,14 +22,6 @@ type User struct {
 	Admin          bool   `json:"admin"`
 	Owner          bool   `json:"owner"`
 	Shop_id        uint   `gorm: "foreignKey : shop_id" json: shop`
-}
-
-func init() {
-	config.Connect()
-	db = config.GetDB()
-	db.AutoMigrate(&Address{}, &User{}, &Shop{})
-	db.Debug().Model(&Shop{}).AddForeignKey("addresses_id", "addresses(id)", "cascade", "cascade")
-	db.Debug().Model(&User{}).AddForeignKey("shop_id", "shops(id)", "cascade", "cascade")
 }
 
 func CreateUser(u *User) *User {
