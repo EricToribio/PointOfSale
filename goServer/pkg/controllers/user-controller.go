@@ -41,7 +41,7 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 		}
 		userToken, err := models.UserToken(user)
 		if err != nil {
-			fmt.Println("Error generating RefreshToken: ", err.Error())
+			fmt.Println("Error generating UserToken: ", err.Error())
 		}
 
 		userCookie := &http.Cookie{Name: "userToken", Value: userToken, Path: "/"}

@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+import jwt_decode from "jwt-decode";
 export interface Address {
     address: string;
     city: string;
@@ -25,7 +27,20 @@ export interface Customer {
 export interface MyCustomer {
     customer: Customer;
     address: Address;
-    vehicles : Vehicle[];
+    vehicle : Vehicle[];
+}
+
+
+export const GetCustomer = () : MyCustomer => {
+const customerCookie : string = Cookies.get('customerToken')
+const customerToken : MyCustomer = jwt_decode(customerCookie)
+console.log(customerToken)
+const customer : MyCustomer = {
+    customer : customerToken.customer,
+    address : customerToken.address,
+    vehicle : customerToken.vehicle
+}
+return customerToken
 }
 
 

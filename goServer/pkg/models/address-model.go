@@ -30,3 +30,13 @@ func AddressExists(address *Address) (*Address, error) {
 	return &PossibleAddress, errors.New("nil")
 
 }
+
+func GetAddressById(id uint) (*Address, error) {
+	var Address Address
+	db.Find(&Address, "id = ?", id)
+	if Address.ID == 0 {
+		err := errors.New("no address")
+		return &Address, err
+	}
+	return &Address, nil
+}

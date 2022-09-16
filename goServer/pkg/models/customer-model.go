@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/jinzhu/gorm"
 )
 
@@ -31,4 +32,36 @@ func FindCustomerByPhoneNumber(phoneNumber string) (*Customer, error) {
 		return &Customer, err
 	}
 	return &Customer, errors.New("nil")
+}
+
+func GetCustomerById(id uint) (*Customer, error) {
+	var Customer Customer
+	db.Find(&Customer, "id = ?", id)
+	if Customer.ID == 0 {
+		err := errors.New("no user")
+		return &Customer, err
+	}
+	return &Customer, nil
+}
+
+func NewCustomerToken(vehicle *Vehicle) (string, error) {
+	customer, err := GetCustomerById(vehicle.Customer_id)
+	if err != nil {
+		return "", err
+	}
+	address, err := GetAddressById(customer.Addresses_id)
+	if err != nil {
+		return "", err
+	}
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["customer"] = customer
+	claims["address"] = address
+	claims["vehicle"] = vehicle
+	tokenString, err := token.SignedString(MySigningKey)
+	if err != nil {
+		fmt.Errorf("Something went wrong: %v", err.Error())
+		return "", err
+	}
+	return tokenString, nil
 }

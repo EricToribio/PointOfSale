@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"pos/pkg/models"
 	"pos/pkg/utils"
+	"time"
 )
 
 type Customer struct {
@@ -60,7 +61,13 @@ func NewCustomer(w http.ResponseWriter, r *http.Request) {
 		newVehicle.Customer_id = foundCustomer.ID
 	}
 	Vehicle := models.CreateVehicle(newVehicle)
-	e, _ := json.Marshal(Vehicle)
+	res, err := models.NewCustomerToken(Vehicle)
+	if err != nil {
+		fmt.Println("Error generating CustomerToken: ", err.Error())
+	}
+	newCustomerCookie := &http.Cookie{Name: "customerToken", Value: res, Path: "/", Expires: time.Now().UTC().AddDate(0, 0, 1)}
+	http.SetCookie(w, newCustomerCookie)
+	e, _ := json.Marshal("success")
 	w.WriteHeader(200)
 	w.Write(e)
 }

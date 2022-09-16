@@ -1,25 +1,30 @@
 import { State } from "country-state-city";
-import { FormEvent, useState } from "react"
+import Router from "next/router";
+import { FormEvent, useEffect, useState } from "react"
 import PhoneInput from "react-phone-number-input/input";
 import { Alert, Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, Label } from "reactstrap"
 import axios from "../../axios/axios";
-import { Address, Customer, Vehicle } from "../../utils/customer";
+import { Address, Customer, GetCustomer, MyCustomer, Vehicle } from "../../utils/customer";
 import CustomerForm from "../forms/customerForm";
 import VehicleForm from "../forms/vehicleForm";
 
 
 export default () => {
-    let errorMessage = new Map<string, string>();
-    const [states] = useState(State.getStatesOfCountry("US"))
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const toggle = () => setDropdownOpen(prevState => !prevState);
-    
+    const [gotCustomer, setGotCustomer] = useState<boolean>(false);
+    const [foundCustomer, setFoundCustomer] = useState<MyCustomer>();
+
     // ------------form data------------------//
     const [customer, setCustomer] = useState<Customer>();
     const [vehicle, setVehicle] = useState<Vehicle>();
     const [address, setAddress] = useState<Address>();
     const [userErrors, setUserErrors] = useState(new Map<string, string>());
     const [addressErrors, setAddressErrors] = useState(new Map<string, string>());
+
+    useEffect(()=>{
+        setFoundCustomer(GetCustomer)
+    },[gotCustomer])
+
+
 
     const customerChangeHandler = (name, value) => {
         setCustomer({
@@ -50,16 +55,31 @@ export default () => {
         , {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true
-        }).then(res => console.log(res.data))
+        }).then(res => {
+            console.log(res.data)
+            if (res.status === 200) {
+                setGotCustomer(true)
+            }
+
+        })
         .catch(err => console.log(err))
     }
 
 
     return (
-
-        <Form className="d-flex justify-content-center pt-4 gap-4" >
+        <div>
+        {
+            !gotCustomer  ?
+            <Form className="d-flex justify-content-center pt-4 gap-4" >
             <CustomerForm customerChangeHandler={customerChangeHandler} addressChangeHandler={addressChangeHandler}  handleSubmit={null} customer={customer} address={address}/>
           <VehicleForm vehicleChangeHandler={vehicleChangeHandler} handleSubmit={handleSubmit} vehicle={vehicle}/>
         </Form>
+        :
+        <div>
+        </div>
+        }
+        </div>
+
+
     )
 }
