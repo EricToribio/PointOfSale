@@ -1,17 +1,14 @@
-import { State } from "country-state-city";
-import Router from "next/router";
-import { FormEvent, useEffect, useState } from "react"
-import PhoneInput from "react-phone-number-input/input";
-import { Alert, Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, Label } from "reactstrap"
+
+import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react"
+
+import { Form} from "reactstrap"
 import axios from "../../axios/axios";
 import { Address, Customer, GetCustomer, MyCustomer, Vehicle } from "../../utils/customer";
 import CustomerForm from "../forms/customerForm";
 import VehicleForm from "../forms/vehicleForm";
 
 
-export default () => {
-    const [gotCustomer, setGotCustomer] = useState<boolean>(false);
-    const [foundCustomer, setFoundCustomer] = useState<MyCustomer>();
+export default (props : {foundCustomer : MyCustomer,setGotCustomer: Dispatch<SetStateAction<boolean>>, disabled :boolean}) => {
 
     // ------------form data------------------//
     const [customer, setCustomer] = useState<Customer>();
@@ -20,9 +17,12 @@ export default () => {
     const [userErrors, setUserErrors] = useState(new Map<string, string>());
     const [addressErrors, setAddressErrors] = useState(new Map<string, string>());
 
-    useEffect(()=>{
-        setFoundCustomer(GetCustomer)
-    },[gotCustomer])
+    useEffect(() => {
+        setCustomer(props.foundCustomer?.customer)
+        setVehicle(props.foundCustomer?.vehicle)
+        setAddress(props.foundCustomer?.address)
+    },[])
+
 
 
 
@@ -58,7 +58,7 @@ export default () => {
         }).then(res => {
             console.log(res.data)
             if (res.status === 200) {
-                setGotCustomer(true)
+                props.setGotCustomer(true)
             }
 
         })
@@ -67,17 +67,17 @@ export default () => {
 
 
     return (
-        <div>
-        {
-            !gotCustomer  ?
+        <div className="pb-5">
+            {
+                !props.disabled &&
+                <h1 className="text-center pt-1">New Customer</h1>
+            }
             <Form className="d-flex justify-content-center pt-4 gap-4" >
-            <CustomerForm customerChangeHandler={customerChangeHandler} addressChangeHandler={addressChangeHandler}  handleSubmit={null} customer={customer} address={address}/>
-          <VehicleForm vehicleChangeHandler={vehicleChangeHandler} handleSubmit={handleSubmit} vehicle={vehicle}/>
+
+            <CustomerForm customerChangeHandler={customerChangeHandler} addressChangeHandler={addressChangeHandler}  handleSubmit={null} customer={customer} address={address} disabled={props.disabled}/>
+          <VehicleForm vehicleChangeHandler={vehicleChangeHandler} handleSubmit={handleSubmit} vehicle={vehicle} disabled={props.disabled}/>
         </Form>
-        :
-        <div>
-        </div>
-        }
+       
         </div>
 
 

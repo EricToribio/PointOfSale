@@ -3,13 +3,12 @@ import { MyUser } from "../../utils/userUtil"
 import FindCustomerModal from "../modals/findCustomerModal"
 
 
-export default (props:{user: MyUser ,setIsNewCustomer:Dispatch<SetStateAction<Boolean>>}) => {
+export default (props:{setIsNewCustomer:Dispatch<SetStateAction<boolean>>}) => {
 
 
     return(
-        <div className=" d-flex justify-content-center">
-            {/* <button>Look up Customer</button> */}
-            <FindCustomerModal user={props.user}/>
+        <div className=" d-flex gap-4">
+            <FindCustomerModal />
             <button onClick={()=>props.setIsNewCustomer(true)}>New Customer</button>
         </div>
     )

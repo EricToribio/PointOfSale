@@ -18,22 +18,23 @@ type Customer struct {
 	City        string `json:"city"`
 	State       string `json:"state"`
 	Zip         string `json:"zip"`
-	Year        int64  `json:"year"`
+	Year        string `json:"year"`
 	Make        string `json:"make"`
 	Model       string `json:"model"`
 	Vin         string `json:"vin"`
 	Plate       string `json:"plate"`
-	EngineSize  int64  `json:"engineSize"`
+	EngineSize  string `json:"engineSize"`
 }
 
 func NewCustomer(w http.ResponseWriter, r *http.Request) {
 	Customer := &Customer{}
 	utils.ParseBody(r, Customer)
-	fmt.Print(Customer)
+	fmt.Print(Customer.PhoneNumber)
 	NewCustomer := &models.Customer{}
 	NewCustomer.FirstName = Customer.FirstName
 	NewCustomer.LastName = Customer.LastName
 	NewCustomer.Email = Customer.Email
+	NewCustomer.PhoneNumber = Customer.PhoneNumber
 	NewAddress := &models.Address{}
 	NewAddress.Street = Customer.Address
 	NewAddress.City = Customer.City
@@ -41,6 +42,7 @@ func NewCustomer(w http.ResponseWriter, r *http.Request) {
 	NewAddress.Zip = Customer.Zip
 	newAddress, err := models.AddressExists(NewAddress)
 	if err.Error() != "nil" {
+
 		address := models.CreateAddress(NewAddress)
 		NewCustomer.Addresses_id = address.ID
 	} else {

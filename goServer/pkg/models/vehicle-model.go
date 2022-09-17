@@ -8,8 +8,8 @@ type Vehicle struct {
 	Make         string `json:"make"`
 	VehicleModel string `json:"model"`
 	Plate        string `json:"plate"`
-	Year         int64  `json:"year"`
-	EngineSize   int64  `json:"engineSize"`
+	Year         string `json:"year"`
+	EngineSize   string `json:"engineSize"`
 	Customer_id  uint   `gorm: "foreignkey : Customer_id" json: "customer_id"`
 }
 

@@ -4,7 +4,7 @@ import { MyUser } from "../../utils/userUtil";
 import LookUp from "./modalComponents/lookUp";
 
 
-export default (props:{user : MyUser}) => {
+export default () => {
     const [open, setOpen] = useState<boolean>(false);
 
     const toggle = () => setOpen(!open);
@@ -19,7 +19,6 @@ export default (props:{user : MyUser}) => {
             
                 <Modal className="modal-container" isOpen={open} toggle={toggle}>
                     <ModalBody className="modal-custom">
-                        <h1 className="text-center">{props.user.shop.shopName}</h1>
                         <h2 className="text-center">Customer LookUp</h2>
                         <LookUp/>
                     </ModalBody>

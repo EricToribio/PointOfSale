@@ -1,9 +1,10 @@
 import { State } from "country-state-city";
 import { useState } from "react";
-import PhoneInput from "react-phone-number-input/input";
+import PhoneInput  from "react-phone-number-input/input";
 import { Alert, Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormGroup, Input, Label } from "reactstrap"
 import { Address, Customer } from "../../utils/customer";
-export default (props : {customerChangeHandler : Function, addressChangeHandler : Function,handleSubmit : Function | null,customer : Customer | undefined, address : Address | undefined}) => {
+import { formatPhoneNumber } from "react-phone-number-input";
+export default (props : {customerChangeHandler : Function, addressChangeHandler : Function,handleSubmit : Function | null,customer : Customer | undefined, address : Address | undefined, disabled: boolean}) => {
     const [states] = useState(State.getStatesOfCountry("US"))
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const toggle = () => setDropdownOpen(prevState => !prevState);
@@ -26,6 +27,7 @@ export default (props : {customerChangeHandler : Function, addressChangeHandler 
                                 placeholder=""
                                 value={props.customer?.firstName}
                                 type="text"
+                                disabled={props.disabled}
                                 onChange={(e) => props.customerChangeHandler(e.target.name, e.target.value)}
                             />
                             {userErrors.get("firstName") &&
@@ -44,6 +46,7 @@ export default (props : {customerChangeHandler : Function, addressChangeHandler 
                                 value={props.customer?.lastName}
                                 placeholder=""
                                 type="text"
+                                disabled={props.disabled}
                                 onChange={(e) => props.customerChangeHandler(e.target.name, e.target.value)}
                             />
                             {userErrors.get("lastName") &&
@@ -62,6 +65,7 @@ export default (props : {customerChangeHandler : Function, addressChangeHandler 
                                 placeholder=""
                                 value={props.customer?.email}
                                 type="email"
+                                disabled={props.disabled}
                                 onChange={(e) => props.customerChangeHandler(e.target.name, e.target.value)}
                             />
                             {userErrors.get("email") &&
@@ -79,8 +83,9 @@ export default (props : {customerChangeHandler : Function, addressChangeHandler 
                                 className="phone-input"
                                 country="US"
                                 name="phone"
-                                value={props.customer?.phone}
-                                onChange={(e) => props.customerChangeHandler("phone", e)}
+                                placeholder={props.customer?.phoneNumber}
+                                disabled={props.disabled}
+                                onChange={(e) => props.customerChangeHandler("phone", formatPhoneNumber(e))}
                             />
                         </FormGroup>
 
@@ -96,6 +101,7 @@ export default (props : {customerChangeHandler : Function, addressChangeHandler 
                                 placeholder=""
                                 value={props.address?.address}
                                 type="text"
+                                disabled={props.disabled}
                                 onChange={(e) => props.addressChangeHandler(e)}
                             />
                             {userErrors.get("address") &&
@@ -114,6 +120,7 @@ export default (props : {customerChangeHandler : Function, addressChangeHandler 
                                 placeholder=""
                                 value={props.address?.city}
                                 type="text"
+                                disabled={props.disabled}
                                 onChange={(e) => props.addressChangeHandler(e)}
                             />
                             {userErrors.get("city") &&
@@ -132,6 +139,7 @@ export default (props : {customerChangeHandler : Function, addressChangeHandler 
                                 value={props.address?.zip}
                                 placeholder="5 digit zip" 
                                 type="number"
+                                disabled={props.disabled}
                                 onChange={(e) => {
                                     props.addressChangeHandler(e)}}
                             />{userErrors.get("zipCode") &&
@@ -145,11 +153,14 @@ export default (props : {customerChangeHandler : Function, addressChangeHandler 
                             <Dropdown
                                 isOpen={dropdownOpen}
                                 toggle={toggle}
+                                disabled={props.disabled}
+
                             >
                                 <DropdownToggle caret>
                                 {props.address?.state ? props.address?.state : "State"}
                                 </DropdownToggle>
                                 <DropdownMenu >
+                                    
                                     {
                                         states.map((state, i) => {
                                             if (state.isoCode.length < 3 && state.isoCode !== "PR" && state.isoCode !== "DC" && state.isoCode !== "GU" && state.isoCode !== "MP" && state.isoCode !== "VI" && state.isoCode !== "UM" && state.isoCode !== "AS") {

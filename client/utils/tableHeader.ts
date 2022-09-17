@@ -10,3 +10,8 @@ export const tableHeaders : tableHeader[] = [
     {Name: "Paid Invoices", Tab: "paidInvoices"},
     {Name: "All Invoices", Tab: "allInvoices"}
 ]
+
+export const newRoTableHeaders : tableHeader[] = [
+    {Name: "Customer", Tab: "customer"},
+    {Name: "Jobs", Tab:"jobs"}
+]

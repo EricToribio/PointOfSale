@@ -2,7 +2,7 @@ import { useState } from "react";
 import { MyUser } from "../../utils/userUtil";
 
 
-export default (props: {user:MyUser,page:string}) => {
+export default (props: {user:MyUser | undefined,page:string}) => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(true);
   
 
@@ -18,7 +18,7 @@ export default (props: {user:MyUser,page:string}) => {
     <nav className="navbar navbar-expand-lg navbar-light bg-light rounded px-4">
       <h2 className="navbar-brand font-weight-bolder">
 
-        <span className="">{props.user.shop.shopName}</span>
+        <span className="">{props.user?.shop.shopName}</span>
       </h2>
 
       <button className="custom-toggler navbar-toggler" type="button"
@@ -36,7 +36,7 @@ export default (props: {user:MyUser,page:string}) => {
         <div className={`${isNavCollapsed ? 'navbar-collapse' : 'position-absolute top-3 end-0 bg-light mt-2'}  `}
         onMouseLeave={isNavCollapsed ? handleNull : handleNavCollapse}>
           {
-            props.page !== "account" && props.user.admin &&
+            props.page !== "account" && props.user?.admin &&
             <a className="nav-link text-info p-2" href="/pos/account" >Account</a>
           }
           {

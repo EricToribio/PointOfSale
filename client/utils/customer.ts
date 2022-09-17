@@ -8,26 +8,26 @@ export interface Address {
 }
 
 export interface Vehicle {
-    year: number;
+    year: string;
     id: number;
     vin: string;
     make: string;
     model: string;
     plate: string;
-    engineSize : number
+    engineSize : string
 }
 
 export interface Customer {
     firstName: string ;
     lastName: string;
     email: string;
-    phone: string;
+    phoneNumber: string;
 }
 
 export interface MyCustomer {
     customer: Customer;
     address: Address;
-    vehicle : Vehicle[];
+    vehicle : Vehicle;
 }
 
 

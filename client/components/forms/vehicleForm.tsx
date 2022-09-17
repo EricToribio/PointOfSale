@@ -2,7 +2,7 @@ import { FormGroup, Label, Input, Button } from "reactstrap"
 import { Vehicle } from "../../utils/customer"
 
 
-export default (props : {vehicleChangeHandler : Function, handleSubmit : Function | null, vehicle : Vehicle | undefined}) => {
+export default (props : {vehicleChangeHandler : Function, handleSubmit : Function | null, vehicle : Vehicle | undefined, disabled : boolean}) => {
 
 
     return (
@@ -20,6 +20,7 @@ export default (props : {vehicleChangeHandler : Function, handleSubmit : Functio
                     type="number"
                     value={props.vehicle?.year}
                     onChange={(e) => props.vehicleChangeHandler(e)}
+                    disabled={props.disabled}
                     />
                 </FormGroup>
                 <FormGroup>
@@ -30,6 +31,7 @@ export default (props : {vehicleChangeHandler : Function, handleSubmit : Functio
                     id="make"
                     name="make"
                     value={props.vehicle?.make}
+                    disabled={props.disabled}
                     onChange={(e) => props.vehicleChangeHandler(e)}
                     />
                 </FormGroup>
@@ -41,6 +43,7 @@ export default (props : {vehicleChangeHandler : Function, handleSubmit : Functio
                     id="model"
                     name="model"
                     value={props.vehicle?.model}
+                    disabled={props.disabled}
                     onChange={(e) => props.vehicleChangeHandler(e)}
                     />
                 </FormGroup>
@@ -54,6 +57,8 @@ export default (props : {vehicleChangeHandler : Function, handleSubmit : Functio
                     id="vin"
                     name="vin"
                     value={props.vehicle?.vin}
+                    disabled={props.disabled}
+                    
                     onChange={(e) => props.vehicleChangeHandler(e)}
                     />
                 </FormGroup>
@@ -65,6 +70,7 @@ export default (props : {vehicleChangeHandler : Function, handleSubmit : Functio
                     id="plate"
                     name="plate"
                     value={props.vehicle?.plate}
+                    disabled={props.disabled}
                     onChange={(e) => props.vehicleChangeHandler(e)}
                     />
                 </FormGroup>
@@ -77,6 +83,7 @@ export default (props : {vehicleChangeHandler : Function, handleSubmit : Functio
                     id="engineSize"
                     name="engineSize"
                     value={props.vehicle?.engineSize}
+                    disabled={props.disabled}
                     onChange={(e) => props.vehicleChangeHandler(e)}
                     />
                                             </FormGroup>
