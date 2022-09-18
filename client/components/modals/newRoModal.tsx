@@ -5,7 +5,7 @@ import WorkOrderCustomerForm from "../workOrder/workOrderCustomerForm"
 
 
 
-export default (props : {IsOpen: boolean,toggle : Function,setGotCustomer : Dispatch<SetStateAction<boolean>>,setIsNewCustomer : Dispatch<SetStateAction<boolean>>,isNewCustomer : boolean}) => {
+export default (props : {setOpen : Dispatch<SetStateAction<boolean>>,IsOpen: boolean,toggle : Function,setGotCustomer : Dispatch<SetStateAction<boolean>>,setIsNewCustomer : Dispatch<SetStateAction<boolean>>,isNewCustomer : boolean}) => {
 
 
     return (
@@ -15,7 +15,7 @@ export default (props : {IsOpen: boolean,toggle : Function,setGotCustomer : Disp
             props.isNewCustomer ? 
             <Modal className="modal-xl modal-container" isOpen={props.IsOpen} toggle={props.toggle}>
             <ModalBody className=" modal-custom">
-                    <WorkOrderCustomerForm setGotCustomer={props.setGotCustomer} disabled={false}/> 
+                    <WorkOrderCustomerForm setGotCustomer={props.setGotCustomer} disabled={false} setOpen={props.setOpen}/> 
                     </ModalBody>
                     </Modal>
                     :

@@ -49,15 +49,15 @@ func NewShopSignUp(w http.ResponseWriter, r *http.Request) {
 	} else {
 		Shop.Addresses_id = newAddress.ID
 	}
-	if !models.IsValidShopName(NewShop.ShopName) {
-		errors["shopName"] = " Shop name must be at least 5 characters long!"
-		if !models.IsEmailValid(NewUser.Email) {
-			errors["email"] = "Enter a valid email"
-		}
-		if !models.IsValidPassword(NewUser.Password) {
-			errors["password"] = "Password must contain at least one lowercase letter, one uppercase letter, one number, and be at least 8 characters long"
-		}
-	}
+	// if !models.IsValidShopName(NewShop.ShopName) {
+	// 	errors["shopName"] = " Shop name must be at least 5 characters long!"
+	// 	if !models.IsEmailValid(NewUser.Email) {
+	// 		errors["email"] = "Enter a valid email"
+	// 	}
+	// 	if !models.IsValidPassword(NewUser.Password) {
+	// 		errors["password"] = "Password must contain at least one lowercase letter, one uppercase letter, one number, and be at least 8 characters long"
+	// 	}
+	// }
 	if len(errors) > 0 {
 		res, _ := json.Marshal(errors)
 		w.Write(res)

@@ -32,24 +32,23 @@ export default () => {
   
   }
   useEffect(() => {
-    !gotCustomer && toggle()
+    !gotCustomer && !Cookies.get('customerToken') && toggle()
   },[!gotCustomer])
+
+  
 
   useEffect(() => {
     Cookies.get('customerToken') && (
       setFoundCustomer(GetCustomer),
       setGotCustomer(true)
     )
-  }, [gotCustomer])
-
-  useEffect(() => {
     setUser(GetUser())
     setLoaded(true)
-  }, [])
+  }, [open])
 
   return (
     <div>
-      <NewRoModal IsOpen={open} toggle={toggle} setGotCustomer={setGotCustomer} setIsNewCustomer={setIsNewCustomer} isNewCustomer={isNewCustomer}/>
+      <NewRoModal IsOpen={open} toggle={toggle} setGotCustomer={setGotCustomer} setIsNewCustomer={setIsNewCustomer} isNewCustomer={isNewCustomer} setOpen={setOpen}/>
       {loaded &&
         <div>
           <MainNav user={user} page={'newRo'} />
@@ -72,7 +71,7 @@ export default () => {
               <div>
                 {
                   tab === "customer" ?
-                  <WorkOrderCustomerForm foundCustomer={foundCustomer} setGotCustomer={setGotCustomer} disabled={true} />
+                  <WorkOrderCustomerForm setOpen={setOpen} foundCustomer={foundCustomer} setGotCustomer={setGotCustomer} disabled={true} />
                   :
                   <div>
                     <h2>jobs</h2>
