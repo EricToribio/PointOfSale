@@ -14,7 +14,7 @@ export default () => {
     return (
         <div className="px-5">
 
-        <table className="border border-color-dark table table-striped table-bordered text-center table-hover">
+        <table className="border table-light border-color-dark table table-bordered text-center table-hover">
             <thead>
                 <tr  >
                     <td>Invoice #</td>

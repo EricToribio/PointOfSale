@@ -1,5 +1,6 @@
 
 import Cookies from "js-cookie";
+import router from "next/router";
 import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from "react"
 
 import { Form} from "reactstrap"
@@ -9,7 +10,7 @@ import CustomerForm from "../forms/customerForm";
 import VehicleForm from "../forms/vehicleForm";
 
 
-export default (props : {setFoundCustomer: Dispatch<SetStateAction<MyCustomer>>, setOpen : Dispatch<SetStateAction<boolean>>, foundCustomer : MyCustomer,setGotCustomer: Dispatch<SetStateAction<boolean>>, disabled :boolean}) => {
+export default (props : {setTab : Dispatch<SetStateAction<string>>, setFoundCustomer: Dispatch<SetStateAction<MyCustomer>>, setOpen : Dispatch<SetStateAction<boolean>>, foundCustomer : MyCustomer,setGotCustomer: Dispatch<SetStateAction<boolean>>, disabled :boolean}) => {
 
     // ------------form data------------------//
     const [customer, setCustomer] = useState<Customer>();
@@ -61,8 +62,7 @@ export default (props : {setFoundCustomer: Dispatch<SetStateAction<MyCustomer>>,
             if (res.status === 200) {
                 props.setGotCustomer(true)
                 props.setOpen(false)
-                Cookies.get('customerToken') && (
-                    props.setFoundCustomer(GetCustomer))
+                router.reload(window.location.pathname)
             }
 
         })

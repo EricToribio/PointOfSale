@@ -4,6 +4,7 @@ import { Table } from 'reactstrap'
 import NewRoModal from '../../../components/modals/newRoModal'
 import MainNav from '../../../components/navBars/mainNav'
 import CustomerLookup from '../../../components/workOrder/customerLookup'
+import Jobs from '../../../components/workOrder/jobs'
 import WorkOrderCustomerForm from '../../../components/workOrder/workOrderCustomerForm'
 import { GetCustomer, MyCustomer } from '../../../utils/customer'
 import { newRoTableHeaders } from '../../../utils/tableHeader'
@@ -11,7 +12,7 @@ import { GetUser, MyUser } from '../../../utils/userUtil'
 
 
 export default () => {
-  const [tab, setTab] = useState<string>("customer")
+  const [tab, setTab] = useState<string>(Cookies.get('tab') ? Cookies.get('tab') : "customer")
   const [gotCustomer, setGotCustomer] = useState<boolean>(false);
   const [foundCustomer, setFoundCustomer] = useState<MyCustomer>();
   const [loaded, setLoaded] = useState<boolean>(false);
@@ -44,11 +45,17 @@ export default () => {
     )
     setUser(GetUser())
     setLoaded(true)
-  }, [open])
+  }, [!open])
+
+  const newTab = (e : FormEvent<HTMLInputElement>, name : string) => {
+    e.preventDefault()
+    Cookies.set('tab', name, {path : '/'})
+    setTab(Cookies.get('tab'))
+  }
 
   return (
     <div>
-      <NewRoModal IsOpen={open} toggle={toggle} setGotCustomer={setGotCustomer} setIsNewCustomer={setIsNewCustomer} isNewCustomer={isNewCustomer} setOpen={setOpen}/>
+      <NewRoModal setTab={setTab} IsOpen={open} toggle={toggle} setGotCustomer={setGotCustomer} setIsNewCustomer={setIsNewCustomer} isNewCustomer={isNewCustomer} setOpen={setOpen}/>
       {loaded &&
         <div>
           <MainNav user={user} page={'newRo'} />
@@ -62,7 +69,7 @@ export default () => {
                   tab === item.Tab ? (linkStyle += `${activeLink}`) :
                     (linkStyle += `${inactiveLink}`);
                   return (
-                    <button className={linkStyle + tabStyle} onClick={() => setTab(item.Tab)}>{item.Name}</button>
+                    <button className={linkStyle + tabStyle} onClick={(e) => newTab(e,item.Tab)}>{item.Name}</button>
   
                   )
                 })}
@@ -71,10 +78,10 @@ export default () => {
               <div>
                 {
                   tab === "customer" ?
-                  <WorkOrderCustomerForm setOpen={setOpen} foundCustomer={foundCustomer} setGotCustomer={setGotCustomer} disabled={true} />
+                  <WorkOrderCustomerForm setTab={setTab} setOpen={setOpen} foundCustomer={foundCustomer} setGotCustomer={setGotCustomer} disabled={true} />
                   :
                   <div>
-                    <h2>jobs</h2>
+                    <Jobs/>
                     </div>
                 }
               </div>
