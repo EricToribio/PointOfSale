@@ -11,13 +11,36 @@ export default () => {
     const [part, setPart] = useState<number>();
     const [labor, setLabor] = useState<number>();
     const [quantity, setQuantity] = useState<number>();
-
+    const [partTotal, setPartTotal] = useState<number>();
+    const [laborTotal, setLaborTotal] = useState<number>();
+    const [subTotal, setSubTotal] = useState<number>();
+    const [tax, setTax] = useState<number>();
+    const [total, setTotal] = useState<number>();
     useEffect(() => {
         Cookies.get('jobs') && setJobs(JSON.parse(Cookies.get('jobs')) )
     },[])
 
+    useEffect(() => { 
+        let parts : number  = 0;
+        let labor : number  = 0;
+        let subTotal : number  = 0;
+        let tax : number = 0;
+
+        for (let i = 0; i < jobs.length; i++){
+            parts += parseFloat(jobs[i].Part)
+            labor += parseFloat(jobs[i].Labor)
+        }
+        subTotal = parts + labor
+        tax = subTotal * .07
+        setPartTotal(parseFloat(parts.toFixed(2)))
+        setLaborTotal(parseFloat(labor.toFixed(2)))
+        setSubTotal(parseFloat(subTotal.toFixed(2)))
+        setTax(parseFloat(tax.toFixed(2)));
+        setTotal(parseFloat((subTotal + tax).toFixed(2)))
+    },[jobs])
+
     const addRow = () => {
-        setJobs([...jobs, { Id: jobs.length + 1 }])
+        setJobs([...jobs, { Task : '', Part : 0, Labor : 0 , Total : 0 }])
         
     }
     const handleEdit = (i : number) => {
@@ -57,13 +80,18 @@ export default () => {
         setJobs(data)
         Cookies.set('jobs',JSON.stringify(data), {path: '/'})
     }
-    console.log(jobs)
+    const handleSave = () => {
+        console.log('save')
+    }
 
 
 
     return (
         <div className="d-flex justify-content-center pt-4">
-            <Form className=" ">
+            <Form onSubmit={(e) => {
+                e.preventDefault();
+                handleSave()
+            }}>
             
             <Table className="table border table-border border-color-dark table-hover">
                     <thead>
@@ -152,9 +180,61 @@ export default () => {
             )
                             })
                         }
+                       
+                        <tr className="text-center">
+                            <td><Button className=" btn btn-sm" onClick={(e) => { e.preventDefault(); addRow() }}>+</Button></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Parts Total</td>
+                            <td>{partTotal}</td>
+                        </tr>
+                        <tr className="text-center">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Labor Total</td>
+                            <td>{laborTotal}</td>
+                        </tr>
+                        <tr className="text-center">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Subtotal</td>
+                            <td>{subTotal}</td>
+                        </tr>
+                        <tr className="text-center">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Tax</td>
+                            <td>{tax}</td>
+                        </tr>
+                        <tr className="text-center">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><h4>Total</h4></td>
+                            <td>{total}</td>
+                        </tr>
                         <tr className="">
-                            <td className="">
-                                <button onClick={(e) => { e.preventDefault(); addRow() }}>+</button>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <Button >Save</Button>
                             </td>
                         </tr>
                     </tbody>
