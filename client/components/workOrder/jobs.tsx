@@ -27,8 +27,8 @@ export default () => {
         let tax : number = 0;
 
         for (let i = 0; i < jobs.length; i++){
-            parts += parseFloat(jobs[i].Part)
-            labor += parseFloat(jobs[i].Labor)
+            parts += parseFloat(jobs[i].Part) * parseFloat(jobs[i].Quantity)
+            labor += parseFloat(jobs[i].Labor)* parseFloat(jobs[i].Quantity)
         }
         subTotal = parts + labor
         tax = subTotal * .07

@@ -13,6 +13,7 @@ func init() {
 	db = config.GetDB()
 	db.AutoMigrate(&Address{}, &User{}, &Shop{}, &Customer{}, &Vehicle{})
 	db.Debug().Model(&Shop{}).AddForeignKey("addresses_id", "addresses(id)", "cascade", "cascade")
+	db.Debug().Model(&Customer{}).AddForeignKey("addresses_id", "addresses(id)", "cascade", "cascade")
 	db.Debug().Model(&User{}).AddForeignKey("shop_id", "shops(id)", "cascade", "cascade")
 	db.Debug().Model(&Vehicle{}).AddForeignKey("customer_id", "customer(id)", "cascade", "cascade")
 }
