@@ -8,14 +8,14 @@ import { Jobs } from "../../utils/jobsTable"
 export default () => {
     const [jobs, setJobs] = useState<Jobs[]>([])
     const [task, setTask] = useState<String>();
-    const [part, setPart] = useState<number>();
-    const [labor, setLabor] = useState<number>();
-    const [quantity, setQuantity] = useState<number>();
-    const [partTotal, setPartTotal] = useState<number>();
-    const [laborTotal, setLaborTotal] = useState<number>();
-    const [subTotal, setSubTotal] = useState<number>();
-    const [tax, setTax] = useState<number>();
-    const [total, setTotal] = useState<number>();
+    const [part, setPart] = useState<number>(0);
+    const [labor, setLabor] = useState<number>(0);
+    const [quantity, setQuantity] = useState<number>(0);
+    const [partTotal, setPartTotal] = useState<number>(0);
+    const [laborTotal, setLaborTotal] = useState<number>(0);
+    const [subTotal, setSubTotal] = useState<number>(0);
+    const [tax, setTax] = useState<number>(0);
+    const [total, setTotal] = useState<number>(0);
     useEffect(() => {
         Cookies.get('jobs') && setJobs(JSON.parse(Cookies.get('jobs')) )
     },[])
@@ -40,7 +40,7 @@ export default () => {
     },[jobs])
 
     const addRow = () => {
-        setJobs([...jobs, { Task : '', Part : 0, Labor : 0 , Total : 0 }])
+        setJobs([...jobs, { Task : '', Part : 0, Labor : 0 ,Quantity:0, Total : 0 }])
         
     }
     const handleEdit = (i : number) => {
