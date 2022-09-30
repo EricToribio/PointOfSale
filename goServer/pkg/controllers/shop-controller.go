@@ -116,37 +116,70 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 }
 func Activate(w http.ResponseWriter, r *http.Request) {
 	accessCookie, _ := r.Cookie("accessToken")
-	refreshToken, _ := r.Cookie("refreshToken")
-	tokenString := accessCookie.Value
-	_, claims, _ := middleware.VerifyToken(tokenString)
-	if middleware.IsExpired(claims["exp"]) {
-		tokenString := refreshToken.Value
-		_, claims, _ = middleware.VerifyToken(tokenString)
-		if middleware.IsExpired(claims["exp"]) {
-			fmt.Print("expired token")
+	refreshCookie, _ := r.Cookie("refreshToken")
+	accessTokenString := accessCookie.Value
+	refreshTokenString := refreshCookie.Value
+	accessToken, accClaims, accErr := middleware.VerifyToken(accessTokenString)
+	refreshToken, refClaims, refErr := middleware.VerifyToken(refreshTokenString)
+	if !accessToken.Valid || accErr != nil {
+		fmt.Print("invalid token")
+		valid := map[string]string{
+			"error": "Invalid",
+		}
+		v, _ := json.Marshal(valid)
+		w.WriteHeader(401)
+		w.Write(v)
+		return
+	} else if !refreshToken.Valid || refErr != nil {
+		fmt.Print("invalid token")
+		valid := map[string]string{
+			"error": "Invalid",
+		}
+		v, _ := json.Marshal(valid)
+		w.WriteHeader(401)
+		w.Write(v)
+		return
+	}
+	if accClaims == nil {
+
+		user, err := models.GetUserById(accClaims["id"])
+		if err.Error() == "no user" {
+			fmt.Println(err.Error())
 			res := map[string]string{
-				"error": "Session expired",
+				"error": "No User",
 			}
 			e, _ := json.Marshal(res)
 			w.WriteHeader(401)
 			w.Write(e)
 			return
 		}
-	}
-	user, err := models.GetUserById(claims["id"])
-	if err.Error() == "no user" {
-		fmt.Println(err.Error())
-		res := map[string]string{
-			"error": "No User",
-		}
-		e, _ := json.Marshal(res)
-		w.WriteHeader(401)
-		w.Write(e)
-	}
-	shop := models.GetShop(user.Shop_id)
-	models.UpdateShop(shop)
+		shop := models.GetShop(user.Shop_id)
+		models.UpdateShop(shop)
 
-	e, _ := json.Marshal("success")
-	w.WriteHeader(200)
-	w.Write(e)
+		e, _ := json.Marshal("success")
+		w.WriteHeader(200)
+		w.Write(e)
+		return
+	}
+	if refClaims == nil {
+
+		user, err := models.GetUserById(refClaims["id"])
+		if err.Error() == "no user" {
+			fmt.Println(err.Error())
+			res := map[string]string{
+				"error": "No User",
+			}
+			e, _ := json.Marshal(res)
+			w.WriteHeader(401)
+			w.Write(e)
+			return
+		}
+		shop := models.GetShop(user.Shop_id)
+		models.UpdateShop(shop)
+
+		e, _ := json.Marshal("success")
+		w.WriteHeader(200)
+		w.Write(e)
+		return
+	}
 }

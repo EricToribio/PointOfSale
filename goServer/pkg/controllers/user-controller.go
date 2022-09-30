@@ -110,20 +110,21 @@ func NewLogin(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func RefreshAuth(w http.ResponseWriter, r *http.Request) {
-	refreshToken, _ := r.Cookie("refreshToken")
+	refreshToken, cookieErr := r.Cookie("refreshToken")
+	if cookieErr != nil {
+		if cookieErr == http.ErrNoCookie {
+			// If the cookie is not set, return an unauthorized status
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+		// For any other type of error, return a bad request status
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 	accessCookie, _ := r.Cookie("accessToken")
 	tokenString := refreshToken.Value
 	token, claims, err := middleware.VerifyToken(tokenString)
-	if middleware.IsExpired(claims["exp"]) {
-		fmt.Print("expired token")
-		res := map[string]string{
-			"error": "Session expired",
-		}
-		e, _ := json.Marshal(res)
-		w.WriteHeader(401)
-		w.Write(e)
-		return
-	} else if !token.Valid || err != nil {
+	if !token.Valid || err != nil {
 		fmt.Print("invalid token")
 		valid := map[string]string{
 			"error": "Invalid",
@@ -180,16 +181,7 @@ func AccessAuth(w http.ResponseWriter, r *http.Request) {
 	refreshCookie, _ := r.Cookie("refreshToken")
 	tokenString := accessCookie.Value
 	token, claims, err := middleware.VerifyToken(tokenString)
-	if middleware.IsExpired(claims["exp"]) {
-		fmt.Print("expired token")
-		res := map[string]string{
-			"error": "Session expired",
-		}
-		e, _ := json.Marshal(res)
-		w.WriteHeader(401)
-		w.Write(e)
-		return
-	} else if !token.Valid || err != nil {
+	if !token.Valid || err != nil {
 		fmt.Print("invalid token")
 		valid := map[string]string{
 			"error": "Invalid",
