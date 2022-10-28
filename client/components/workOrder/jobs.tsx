@@ -40,9 +40,17 @@ export default () => {
     },[jobs])
 
     const addRow = () => {
-        setJobs([...jobs, { Task : '', Part : 0, Labor : 0 ,Quantity:0, Total : 0 }])
+        const data = [...jobs]
+        for (let j = 0; j < data.length; j++) {
+                data[j] = {
+                    ...data[j],
+                    disabled : true
+                }
+            }
+            setJobs([...data, { Task : '', Part : 0, Labor : 0 ,Quantity:0, Total : 0 }])
+        }
         
-    }
+        
     const handleEdit = (i : number) => {
         const data = [...jobs]
         for (let j = 0; j < data.length; j++) {
@@ -67,16 +75,22 @@ export default () => {
 
     const handleSubmit = (i: number) => {
         console.log(i)
+        let quan :number = quantity
+        let lab : number = parseFloat(labor).toFixed(2)
         const data = [...jobs]
+        if (parseInt(quan) == 0){
+            quan = 1
+        }
         data[i] = {
             Id : jobs[i].Id,
             Task : task,
-            Part : part,
-            Labor : labor,
-            Quantity : quantity,
-            Total :( parseFloat(part) + parseFloat(labor)) * parseFloat(quantity),
+            Part : parseFloat(part).toFixed(2),
+            Labor : lab,
+            Quantity : parseInt(quan),
+            Total :(( parseFloat(part) + parseFloat(labor)) * parseInt(quan)).toFixed(2),
             disabled: true
         }
+        setLabor(lab)
         setJobs(data)
         Cookies.set('jobs',JSON.stringify(data), {path: '/'})
     }
@@ -116,7 +130,7 @@ export default () => {
                                             <Input
                                                 id="Task"
                                                 name="Task"
-                                                placeholder={item.Task}
+                                                Value={item.Task}
                                                 type="text"
                                                 disabled={item.disabled}
                                                 onChange={(e) => setTask(e.target.value)}
@@ -127,7 +141,7 @@ export default () => {
                                             
                                                 id="Part"
                                                 name="Part"
-                                                placeholder={item.Part}
+                                                Value={item.Part}
                                                 type="number"
                                                 disabled={item.disabled}
                                                 onChange={(e) => setPart(e.target.value)}
@@ -137,17 +151,17 @@ export default () => {
                                             <Input
                                                 id="labor"
                                                 name="labor"
-                                                placeholder={item.Labor}
+                                                Value={item.Labor}
                                                 type="number"
                                                 disabled={item.disabled}
-                                                onChange={(e) => setLabor(e.target.value)}
+                                                onChange={(e) => setLabor(parseFloat(e.target.value))}
                                                 />
                                         </td>
                                         <td className="">
                                             <Input
                                             id="quantity"
                                             name="quantity"
-                                            placeholder={item.Quantity}
+                                            Value={item.Quantity}
                                             type="number"
                                             disabled={item.disabled}
                                             onChange={(e) => setQuantity(e.target.value)}
@@ -158,7 +172,7 @@ export default () => {
                                             <Input
                                                 id="Total"
                                                 name="Total"
-                                                value={item.Total}
+                                                Value={item.Total}
                                                 disabled={true}
             
                                                 />
